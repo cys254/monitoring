@@ -16,10 +16,10 @@ package com.nds.cab.component;
 // import org.springframework.context.ApplicationContext;
 // import org.springframework.context.support.ClassPathXmlApplicationContext;
 //
-// import com.cisco.vss.foundation.monitoring.MonitoringAgent;
-// import com.cisco.vss.foundation.monitoring.MonitoringClient;
-// import com.cisco.vss.foundation.monitoring.exception.AgentAlreadyRegisteredException;
-// import com.cisco.vss.foundation.monitoring.exception.AgentNotRegisteredException;
+// import com.cisco.oss.foundation.monitoring.MonitoringAgent;
+// import com.cisco.oss.foundation.monitoring.MonitoringClient;
+// import com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException;
+// import com.cisco.oss.foundation.monitoring.exception.AgentNotRegisteredException;
 //
 // public class MXSpringTest {
 // static final String authKey = "Abcd1234";

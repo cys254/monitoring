@@ -1,4 +1,4 @@
-package com.cisco.vss.foundation.monitoring.service;
+package com.cisco.oss.foundation.monitoring.service;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
@@ -8,9 +8,9 @@ import java.util.concurrent.Executors;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.cisco.vss.foundation.monitoring.CommunicationInfo;
-import com.cisco.vss.foundation.monitoring.MonitoringAgent;
-import com.cisco.vss.foundation.monitoring.ServiceDetails;
+import com.cisco.oss.foundation.monitoring.CommunicationInfo;
+import com.cisco.oss.foundation.monitoring.MonitoringAgent;
+import com.cisco.oss.foundation.monitoring.ServiceDetails;
 
 public class TestMultiService {
 

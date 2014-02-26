@@ -8,7 +8,7 @@
  */
 package com.nds.cab.component;
 
-import com.cisco.vss.foundation.monitoring.RedundancyMode;
+import com.cisco.oss.foundation.monitoring.RedundancyMode;
 
 public class IncompatibleComponentSystem implements IncompatibleComponentMXBean {
     IncompatibleData data = new IncompatibleData();

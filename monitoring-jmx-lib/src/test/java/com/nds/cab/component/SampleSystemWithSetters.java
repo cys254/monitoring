@@ -16,7 +16,7 @@ package com.nds.cab.component;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cisco.vss.foundation.monitoring.RedundancyMode;
+import com.cisco.oss.foundation.monitoring.RedundancyMode;
 
 public class SampleSystemWithSetters implements SampleSystemWithSettersMXBean {
     private String name = "ABC";

@@ -10,9 +10,9 @@ package com.nds.cab.component;
 
 import javax.xml.bind.annotation.XmlElement;
 
-import com.cisco.vss.foundation.monitoring.RedundancyMode;
-import com.cisco.vss.foundation.monitoring.INotifier;
-import com.cisco.vss.foundation.monitoring.NotificationSender;
+import com.cisco.oss.foundation.monitoring.RedundancyMode;
+import com.cisco.oss.foundation.monitoring.INotifier;
+import com.cisco.oss.foundation.monitoring.NotificationSender;
 
 public class NotificationComponentSystem implements NDSComponentSystemMXBean, INotifier {
     private String name = "ABC";

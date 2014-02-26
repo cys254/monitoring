@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.cisco.vss.foundation.monitoring.RedundancyMode;
+import com.cisco.oss.foundation.monitoring.RedundancyMode;
 
 public class AllValidData implements AllValidDataMXBean {
     private String name = "ABC";

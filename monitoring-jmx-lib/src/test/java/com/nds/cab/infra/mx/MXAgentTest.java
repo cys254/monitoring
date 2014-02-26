@@ -6,7 +6,7 @@
  * recording or otherwise, or stored in any retrieval system of any nature,
  * without written permission of the copyright holder.
  */
-package com.cisco.vss.foundation.monitoring;
+package com.cisco.oss.foundation.monitoring;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -22,10 +22,10 @@ import com.nds.cab.component.AllValidData;
 import com.nds.cab.component.IncompatibleComponentSystem;
 import com.nds.cab.component.NDSComponentSystem;
 import com.nds.cab.component.NotificationComponentSystem;
-import com.cisco.vss.foundation.monitoring.component.config.MonitorAndManagementSettings;
-import com.cisco.vss.foundation.monitoring.exception.AgentAlreadyRegisteredException;
-import com.cisco.vss.foundation.monitoring.exception.AgentRegistrationException;
-import com.cisco.vss.foundation.monitoring.exception.IncompatibleClassException;
+import com.cisco.oss.foundation.monitoring.component.config.MonitorAndManagementSettings;
+import com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException;
+import com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException;
+import com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException;
 
 public class MXAgentTest {
     static final String authKey = "Abcd1234";

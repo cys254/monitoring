@@ -11,7 +11,7 @@
  * Created on Aug 24, 2010
  */
 
-package com.cisco.vss.foundation.monitoring.exception;
+package com.cisco.oss.foundation.monitoring.exception;
 
 import static org.junit.Assert.*;
 

@@ -1,4 +1,4 @@
-package com.cisco.vss.foundation.monitoring.component.config;
+package com.cisco.oss.foundation.monitoring.component.config;
 
 import static org.junit.Assert.*;
 

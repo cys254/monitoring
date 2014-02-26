@@ -10,7 +10,7 @@
 /*
  * Created on Aug 23, 2010
  */
-package com.cisco.vss.foundation.monitoring;
+package com.cisco.oss.foundation.monitoring;
 
 import com.nds.cab.component.NDSComponentSystem;
 

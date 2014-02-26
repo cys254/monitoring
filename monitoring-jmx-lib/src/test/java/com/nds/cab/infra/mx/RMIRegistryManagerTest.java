@@ -11,7 +11,7 @@
  * Created on Aug 26, 2010
  */
 
-package com.cisco.vss.foundation.monitoring;
+package com.cisco.oss.foundation.monitoring;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

@@ -16,7 +16,7 @@ package com.nds.cab.component;
 import java.util.Date;
 import java.util.Map;
 
-import com.cisco.vss.foundation.monitoring.MonitoringMXBean;
+import com.cisco.oss.foundation.monitoring.MonitoringMXBean;
 
 public interface AllValidDataMXBean extends MonitoringMXBean {
     Integer getIntWrapper();

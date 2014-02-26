@@ -6,7 +6,7 @@
  * recording or otherwise, or stored in any retrieval system of any nature,
  * without written permission of the copyright holder.
  */
-package com.cisco.vss.foundation.monitoring;
+package com.cisco.oss.foundation.monitoring;
 
 import java.io.File;
 import java.io.IOException;
