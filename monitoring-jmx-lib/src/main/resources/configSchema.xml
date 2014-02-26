@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<NamespaceDefinitions xsi:noNamespaceSchemaLocation="http://ch-infra.il.nds.com/cabResources/CCP_XML.xsd"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <NamespaceDefinition>
+        <NamespaceIdentifier version="TBD" name="TBD"/>
+        <Parameter name="service.mxagentRegistry.port" type="INTEGER" description="default mx port" advanced="true"
+                   instantiationLevel="GLOBAL">
+            <DefaultValue>
+                <PrimitiveValue value="3000"/>
+            </DefaultValue>
+        </Parameter>
+        <Parameter name="service.mxagentRegistry.innerPort" type="INTEGER" description="default exported port"
+                   advanced="true" instantiationLevel="GLOBAL">
+            <DefaultValue>
+                <PrimitiveValue value="4000"/>
+            </DefaultValue>
+        </Parameter>
+        <Parameter name="service.mxagentRegistry.inProcess" type="BOOLEAN"
+                   description="true/false to spawn rmi registry process in process or new thread"
+                   instantiationLevel="GLOBAL" advanced="true">
+            <DefaultValue>
+                <PrimitiveValue value="false"/>
+            </DefaultValue>
+        </Parameter>
+        <Parameter name="service.mxagentRegistry.monitoringEnabled" type="BOOLEAN"
+                   description="general flag to turn monitor on or off" advanced="true" instantiationLevel="GLOBAL">
+            <DefaultValue>
+                <PrimitiveValue value="true"></PrimitiveValue>
+            </DefaultValue>
+        </Parameter>
+        <Parameter name="service.mxagentRegistry.rmiregistryMaxHeapSize" type="INTEGER"
+                   description="Maximum heap size in MB for rmi registry" advanced="true" instantiationLevel="GLOBAL">
+            <DefaultValue>
+                <PrimitiveValue value="2048"/>
+            </DefaultValue>
+        </Parameter>
+        <Parameter name="service.mxagentRegistry.statisticsCalculationWindow" type="INTEGER"
+                   description="The calculation window in which monitoring will calculate statistics such as TPS"
+                   unit="seconds" advanced="true" instantiationLevel="GLOBAL">
+            <DefaultValue>
+                <PrimitiveValue value="120"/>
+            </DefaultValue>
+        </Parameter>
+    </NamespaceDefinition>
+</NamespaceDefinitions>

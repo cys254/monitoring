@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <parent>
+		<groupId>com.cisco.vss.foundation</groupId>
+		<artifactId>foundation-common-base</artifactId>
+		<version>0.0.0-3-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.cisco.vss.foundation</groupId>
+    <artifactId>monitoring-api</artifactId>
+    <name>monitoring-api</name>
+    <version>0.0.0-3-SNAPSHOT</version>
+    <description>This project is the foundation runtime monitoring api project.</description>
+    <url>https://github.com/foundation-runtime/monitoring/monitoring-api</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <issueManagement>
+        <system>Github
+        </system>
+        <url>{URL in JIRA or Product name in CQ}</url>
+    </issueManagement>
+    <mailingLists>
+        <mailingList/>
+    </mailingLists>
+    <developers>
+        <developer>
+            <id>yogen</id>
+            <name>Yair Ogen</name>
+            <email>yaogen@cisco.com</email>
+            <organization>Cisco</organization>
+            <organizationUrl>http://www.cisco.com</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git@github.com:foundation-runtime/monitoring.git</connection>
+        <developerConnection>scm:git:git@@github.com:foundation-runtime/monitoring.git</developerConnection>
+        <url>https://github.com/foundation-runtime/monitoring.git</url>
+        <tag>HEAD</tag>
+    </scm>
+    <organization>
+        <name>Cisco</name>
+        <url>http://www.cisco.com</url>
+    </organization>
+    <build>
+        <pluginManagement>
+            <plugins/>
+        </pluginManagement>
+        <plugins>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-version}</version>
+        </dependency>
+    </dependencies>	
+</project>

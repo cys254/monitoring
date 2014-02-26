@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<monitorAndManagementSettings>
+    <controlSettings>
+        <startCommandSettings>
+            <command>/etc/init.d/nds_sample start</command>
+            <matchPolicy>PartialMatch</matchPolicy>
+            <successIndication>[OK]</successIndication>
+        </startCommandSettings>
+        <statusCommandSettings>
+            <command>/etc/init.d/nds_sample status</command>
+            <downIndication>process(es) NOT running</downIndication>
+            <matchPolicy>PartialMatch</matchPolicy>
+            <upIndication>process(es) running</upIndication>
+        </statusCommandSettings>
+        <stopCommandSettings>
+            <command>/etc/init.d/nds_sample stop</command>
+            <matchPolicy>PartialMatch</matchPolicy>
+            <successIndication>stopped</successIndication>
+        </stopCommandSettings>
+    </controlSettings>
+</monitorAndManagementSettings>

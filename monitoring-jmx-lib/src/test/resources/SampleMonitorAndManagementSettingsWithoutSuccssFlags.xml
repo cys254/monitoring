@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<monitorAndManagementSettings>
+    <controlSettings>
+        <startCommandSettings>
+            <command>/etc/init.d/nds_sample start</command>
+        </startCommandSettings>
+        <statusCommandSettings>
+            <command>/etc/init.d/nds_sample status</command>
+        </statusCommandSettings>
+        <stopCommandSettings>
+            <command>/etc/init.d/nds_sample stop</command>
+        </stopCommandSettings>
+    </controlSettings>
+</monitorAndManagementSettings>
