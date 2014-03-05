@@ -14,13 +14,14 @@
  *  limitations under the License.
  */
 
-package com.cisco.oss.foundation.monitoring;
+package com.cisco.oss.foundation.monitoring.services;
 
-import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnection;
 
-import java.util.List;
+/**
+ * Created by Yair Ogen on 3/5/14.
+ */
+public interface ServiceActor {
 
-public interface ConnectionInfoMXBean {
-
-    List<ServerConnection> getServerConnections();
+    void startTransaction(Service service, int usedThreads);
+    void endTransaction(Service service, boolean isFailed, String description);
 }

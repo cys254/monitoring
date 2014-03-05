@@ -14,16 +14,19 @@
  *  limitations under the License.
  */
 
-package com.cisco.oss.foundation.monitoring;
+package com.cisco.oss.foundation.monitoring.services;
+
+import com.cisco.oss.foundation.monitoring.ConnectionStatus;
 
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
 
-public interface ServerConnection {
+public interface Service {
 
     /**
-     * Name of the component connected to.
+     * Description of the service for an Operator.
      */
-    String getServerName();
+    String getServiceDescription();
 
     /**
      * Either RMI Service Name or Interface Name as defined in the component.
@@ -31,14 +34,14 @@ public interface ServerConnection {
     String getInterfaceName();
 
     /**
-     * Host Name for connection.
+     * Communication protocol e.g. RMI, HTTP etc.
      */
-    String getHostName();
+    String getProtocol();
 
     /**
-     * Port connected to.
+     * Port Number
      */
-    long getDestinationPort();
+    long getPort();
 
     /**
      * Total number of requests on this interface since the component has started.
@@ -60,7 +63,6 @@ public interface ServerConnection {
      */
     String getLastFailedRequestDescription();
 
-
     Date getLastSuccessfulRequestTime();
 
     String getMethodName();
@@ -73,5 +75,7 @@ public interface ServerConnection {
 
     ConnectionStatus getTransactionStatus();
 
-    long getOpenSince();
+    double getTps();
+
+    int getUsedThreads();
 }

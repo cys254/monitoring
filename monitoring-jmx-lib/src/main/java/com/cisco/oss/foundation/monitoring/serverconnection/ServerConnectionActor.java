@@ -14,13 +14,18 @@
  *  limitations under the License.
  */
 
-package com.cisco.oss.foundation.monitoring;
+package com.cisco.oss.foundation.monitoring.serverconnection;
 
-import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnection;
 
-import java.util.List;
+import com.cisco.oss.foundation.monitoring.services.Service;
 
-public interface ConnectionInfoMXBean {
+/**
+ * Created by Yair Ogen on 3/5/14.
+ */
+public interface ServerConnectionActor {
 
-    List<ServerConnection> getServerConnections();
+    void startTransaction(ServerConnection serverConnection);
+    void endTransaction(ServerConnection serverConnection, boolean isFailed, String description);
+    void updateOpenSince(ServerConnection serverConnection, long openSince);
 }
+

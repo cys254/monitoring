@@ -1,10 +1,17 @@
 /*
- * Copyright (c) NDS Limited 2010.
- * All rights reserved.
- * No part of this program may be reproduced, translated or transmitted,
- * in any form or by any means, electronic, mechanical, photocopying,
- * recording or otherwise, or stored in any retrieval system of any nature,
- * without written permission of the copyright holder.
+ * Copyright 2014 Cisco Systems, Inc.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package com.cisco.oss.foundation.monitoring;
@@ -17,6 +24,8 @@ import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.InstanceNotFoundException;
@@ -29,12 +38,24 @@ import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
 
+import com.cisco.oss.foundation.monitoring.serverconnection.ConnectionInfo;
+import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionActor;
+import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionActorImpl;
+import com.cisco.oss.foundation.monitoring.services.ServiceActor;
+import com.cisco.oss.foundation.monitoring.services.ServiceActorImpl;
+import com.cisco.oss.foundation.monitoring.services.ServiceInfo;
+import fi.jumi.actors.ActorRef;
+import fi.jumi.actors.ActorThread;
+import fi.jumi.actors.Actors;
+import fi.jumi.actors.MultiThreadedActors;
+import fi.jumi.actors.eventizers.dynamic.DynamicEventizerProvider;
+import fi.jumi.actors.listeners.CrashEarlyFailureHandler;
+import fi.jumi.actors.listeners.NullMessageListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.remoting.support.RemoteInvocation;
 
 import com.cisco.oss.foundation.monitoring.component.config.MonitorAndManagementSettings;
-import com.cisco.oss.foundation.monitoring.component.config.MonitorAndManagementSettingsMXBean;
 import com.cisco.oss.foundation.monitoring.component.data.ComponentInfo;
 import com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException;
 import com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException;
@@ -49,7 +70,17 @@ import com.cisco.oss.foundation.monitoring.notification.NotificationMXBean;
  * @author manojc
  * @see MonitoringMXBean
  */
-public final class MonitoringAgent {
+public enum MonitoringAgent {
+    INSTANCE;
+    public static final ServiceActorImpl serviceActorImpl =  new ServiceActorImpl();
+    public static final ServerConnectionActorImpl serverConnectionActorImpl =  new ServerConnectionActorImpl();
+    public static final ExecutorService actorsThreadPool = Executors.newCachedThreadPool();
+    public static ActorThread serviceActorThread = null;
+    public static ActorThread serverConnectionActorThread = null;
+    public static final ActorRef<ServiceActor> serviceActor = createServiceActor(actorsThreadPool);
+    public static final ActorRef<ServerConnectionActor> serverConnectorActor = createServerConnectionActor(actorsThreadPool);
+
+
     private static final String COLON = ":";
     private static Map<String, MonitoringAgent> registeredAgents = new HashMap<String, MonitoringAgent>();
     static final Logger LOGGER = LoggerFactory.getLogger(MonitoringAgent.class.getName());
@@ -74,7 +105,6 @@ public final class MonitoringAgent {
     private MXConfiguration configuration = null;
     private static ServiceInfo serviceInfo;
     private static ConnectionInfo connectionInfo;
-    private static MonitoringAgent monitoringAgent = null;
     private boolean isComponentRegisted = false;
     private boolean isInfraRegisted = false;
     private ObjectName notificationObjectName;
@@ -91,19 +121,19 @@ public final class MonitoringAgent {
 
     }
 
-    /**
-     * This constructor not just creates an instance of
-     * <code>MonitoringAgent</code> but also initializes the monitoring
-     * infrastructure and registers the mxBean object.
-     *
-     * @param mXBean
-     *
-     * @throws com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException
-     * @throws com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException
-     * @throws com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException
-     *
-     * @see MonitoringMXBean
-     */
+//    /**
+//     * This constructor not just creates an instance of
+//     * <code>MonitoringAgent</code> but also initializes the monitoring
+//     * infrastructure and registers the mxBean object.
+//     *
+//     * @param mXBean
+//     *
+//     * @throws com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException
+//     * @throws com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException
+//     * @throws com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException
+//     *
+//     * @see MonitoringMXBean
+//     */
 /*	public MonitoringAgent(MonitoringMXBean mXBean) throws AgentAlreadyRegisteredException, AgentRegistrationException,
             IncompatibleClassException {
 
@@ -112,21 +142,21 @@ public final class MonitoringAgent {
 		register(mXBean);
 	}*/
 
-    /**
-     * This constructor not just creates an instance of
-     * <code>MonitoringAgent</code> but also initializes the monitoring
-     * infrastructure with the custom configuration, and registers the mxBean
-     * object.
-     *
-     * @param mXBean
-     * @param configuration
-     * @throws com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException
-     * @throws com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException
-     * @throws com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException
-     * @see MonitoringMXBean
-     * @see MXConfiguration
-     * @see com.cisco.oss.foundation.monitoring.component.config.MonitorAndManagementSettingsMXBean
-     */
+//    /**
+//     * This constructor not just creates an instance of
+//     * <code>MonitoringAgent</code> but also initializes the monitoring
+//     * infrastructure with the custom configuration, and registers the mxBean
+//     * object.
+//     *
+//     * @param mXBean
+//     * @param configuration
+//     * @throws com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException
+//     * @throws com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException
+//     * @throws com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException
+//     * @see MonitoringMXBean
+//     * @see MXConfiguration
+//     * @see com.cisco.oss.foundation.monitoring.component.config.MonitorAndManagementSettingsMXBean
+//     */
 	/*public MonitoringAgent(MonitoringMXBean mXBean, MXConfiguration configuration)
 			throws AgentAlreadyRegisteredException, AgentRegistrationException, IncompatibleClassException {
 
@@ -136,23 +166,10 @@ public final class MonitoringAgent {
 		register(mXBean);
 	}*/
     public static MonitoringAgent getInstance() {
-        if (monitoringAgent == null) {
-            monitoringAgent = new MonitoringAgent();
-        }
-        return monitoringAgent;
+        return INSTANCE;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        try {
-            unregister();
-            LOGGER.debug("MonitoringAgent object finalized");
-        } catch (Exception e) {
-            LOGGER.error("Could not finalize MonitoringAgent", e);
-        } finally {
-            super.finalize();
-        }
-    }
+
 
     /**
      * Two or more instance/modules of applications sharing same instance of JVM
@@ -166,7 +183,7 @@ public final class MonitoringAgent {
      * @param instance Registered instance
      * @param authKey  Authentication key supplied while registering
      * @return Instance of MonitoringAgent
-     * @see com.cisco.oss.foundation.monitoring.MonitoringAgent.register()
+     * @see MonitoringAgent#register()
      */
     public static MonitoringAgent getRegistedAgent(String name, String instance, String authKey) {
         LOGGER.debug("Getting MonitoringAgent instance for (" + name + ", " + instance + ")");
@@ -178,7 +195,7 @@ public final class MonitoringAgent {
      * Returns true if MonitoringAgent is already registered, false otherwise
      *
      * @return true if MonitoringAgent is already registered, false otherwise
-     * @see com.cisco.oss.foundation.monitoring.MonitoringAgent.register()
+     * @see MonitoringAgent#register()
      */
     public synchronized boolean isRegistered() {
         return isRegistered;
@@ -190,7 +207,7 @@ public final class MonitoringAgent {
      *
      * @return JMX Service URL if MonitoringAgent is already registered, null
      * otherwise
-     * @see com.cisco.oss.foundation.monitoring.MonitoringAgent.isRegistered()
+     * @see MonitoringAgent#isRegistered()
      */
     public synchronized String getExposedServiceURL() {
         return exposedServiceURL;
@@ -202,7 +219,7 @@ public final class MonitoringAgent {
      *
      * @return ObjectName of the MBean if MonitoringAgent is already registered,
      * null otherwise
-     * @see com.cisco.oss.foundation.monitoring.MonitoringAgent.isRegistered()
+     * @see MonitoringAgent#isRegistered()
      */
     public synchronized String getExposedObjectName() {
         return exposedObjectName;
@@ -212,7 +229,7 @@ public final class MonitoringAgent {
      * Returns MonitoringMXBean object passed to the register method.
      *
      * @return MonitoringMXBean object passed to the register method
-     * @see com.cisco.oss.foundation.monitoring.MonitoringAgent.register()
+     * @see com.cisco.oss.foundation.monitoring.MonitoringAgent#register()
      */
     public synchronized MonitoringMXBean getExposedObject() {
         return this.exposedObject;
@@ -255,7 +272,7 @@ public final class MonitoringAgent {
      * @throws com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException
      * @throws com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException
      * @throws com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException
-     * @see com.cisco.oss.foundation.monitoring.MonitoringAgent.unregister()
+     * @see MonitoringAgent#unregister()
      */
     public synchronized void register(MonitoringMXBean mxBean) throws AgentAlreadyRegisteredException,
             AgentRegistrationException, IncompatibleClassException {
@@ -348,8 +365,8 @@ public final class MonitoringAgent {
      * @throws com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException
      * @throws com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException
      * @throws com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException
-     * @see com.cisco.oss.foundation.monitoring.MonitoringAgent.unregister()
-     * @see com.cisco.oss.foundation.monitoring.MonitoringAgent.getInstance()
+     * @see MonitoringAgent#unregister()
+     * @see MonitoringAgent#register()
      */
 
     public synchronized void register(MonitoringMXBean mxBean, String authKey) throws AgentAlreadyRegisteredException,
@@ -598,7 +615,7 @@ public final class MonitoringAgent {
      * MonitoringAgent that is already unregistered will have no effect.
      *
      * @throws com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException
-     * @see com.cisco.oss.foundation.monitoring.MonitoringAgent.register()
+     * @see MonitoringAgent#register()
      */
     public synchronized void unregister() throws AgentRegistrationException {
         if (!isRegistered) {
@@ -668,6 +685,8 @@ public final class MonitoringAgent {
             try {
                 LOGGER.debug("ShutdownHookThread called.");
                 unregister();
+                serviceActorThread.stop();
+                actorsThreadPool.shutdown();
             } catch (AgentRegistrationException agentregEx) {
                 LOGGER.debug("ShutdownHookThread failed to unregister MonitoringAgent.");
             }
@@ -750,5 +769,33 @@ public final class MonitoringAgent {
 
     public void setInfraRegisted(boolean isInfraRegisted) {
         this.isInfraRegisted = isInfraRegisted;
+    }
+
+    private static ActorRef<ServiceActor> createServiceActor(ExecutorService actorsThreadPool) {
+        Actors actors = new MultiThreadedActors(
+                actorsThreadPool,
+                new DynamicEventizerProvider(),
+                new CrashEarlyFailureHandler(),
+                new NullMessageListener()
+        );
+
+        // Start up a thread where messages to actors will be executed
+        serviceActorThread = actors.startActorThread();
+        ActorRef<ServiceActor> srvActor = serviceActorThread.bindActor(ServiceActor.class, serviceActorImpl);
+        return srvActor;
+    }
+
+    private static ActorRef<ServerConnectionActor> createServerConnectionActor(ExecutorService actorsThreadPool) {
+        Actors actors = new MultiThreadedActors(
+                actorsThreadPool,
+                new DynamicEventizerProvider(),
+                new CrashEarlyFailureHandler(),
+                new NullMessageListener()
+        );
+
+        // Start up a thread where messages to actors will be executed
+        serverConnectionActorThread = actors.startActorThread();
+        ActorRef<ServerConnectionActor> srvConnActor = serverConnectionActorThread.bindActor(ServerConnectionActor.class, serverConnectionActorImpl);
+        return srvConnActor;
     }
 }

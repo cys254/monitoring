@@ -14,13 +14,12 @@
  *  limitations under the License.
  */
 
-package com.cisco.oss.foundation.monitoring;
+package com.cisco.oss.foundation.monitoring.services;
 
-import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnection;
-
+import java.util.Collection;
 import java.util.List;
 
-public interface ConnectionInfoMXBean {
+public interface ServiceInfoMXBean {
 
-    List<ServerConnection> getServerConnections();
+    List<Service> getServices();
 }

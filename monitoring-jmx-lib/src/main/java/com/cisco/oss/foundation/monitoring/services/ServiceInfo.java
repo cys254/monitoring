@@ -14,32 +14,38 @@
  *  limitations under the License.
  */
 
-package com.cisco.oss.foundation.monitoring;
+package com.cisco.oss.foundation.monitoring.services;
 
+import com.cisco.oss.foundation.monitoring.MonitoringAgent;
+import com.google.common.collect.Lists;
+
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Map;
 
-public enum ConnectionInfo implements ConnectionInfoMXBean {
+public enum ServiceInfo implements ServiceInfoMXBean {
 
     INSTANCE;
 
-    //	private static ConnectionInfo connectionInfo;
-    private List<ServerConnection> connetctions = new CopyOnWriteArrayList<ServerConnection>();
+    private ServiceInfo() {
 
-    public static ConnectionInfo getConnectionInfo() {
-//		if(connectionInfo == null)
-//			connectionInfo = new ConnectionInfo();
-//		return connectionInfo;
+    }
+
+    public static ServiceInfo getServiceInfo() {
+//		if(serviceInfo == null)
+//			serviceInfo = new ServiceInfo();
+//		return serviceInfo;
         return INSTANCE;
     }
 
     @Override
-    public List<ServerConnection> getServerConnections() {
-        return this.connetctions;
+    public List<Service> getServices() {
+
+        Map<Service,ServiceImp> services = MonitoringAgent.serviceActorImpl.services;
+        return (List)Lists.newArrayList(services.values());
+
+
     }
 
-    public void addConnetion(ServerConnection connetion) {
-        connetctions.add(connetion);
-    }
 
 }

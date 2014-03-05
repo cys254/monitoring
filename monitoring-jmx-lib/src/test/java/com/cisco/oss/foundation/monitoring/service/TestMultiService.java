@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.cisco.oss.foundation.monitoring.Service;
+import com.cisco.oss.foundation.monitoring.services.*;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.SlidingTimeWindowReservoir;
 import org.junit.Assert;
@@ -32,7 +32,6 @@ import org.junit.Test;
 
 import com.cisco.oss.foundation.monitoring.CommunicationInfo;
 import com.cisco.oss.foundation.monitoring.MonitoringAgent;
-import com.cisco.oss.foundation.monitoring.ServiceDetails;
 
 public class TestMultiService {
 
@@ -43,7 +42,7 @@ public class TestMultiService {
 
         ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
-        int numOfServices = 1503;
+        int numOfServices = 1234;
 
         final CountDownLatch latch = new CountDownLatch(numOfServices);
 
@@ -78,6 +77,12 @@ public class TestMultiService {
 
         int numberOfThreads = Thread.getAllStackTraces().keySet().size();
         Assert.assertTrue(numberOfThreads <= 30);
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         Collection<Service> services = CommunicationInfo.getCommunicationInfo().getServiceInfo().getServices();
         System.out.println("services: " + services.size());
@@ -154,6 +159,11 @@ public class TestMultiService {
         }
 
 
+
+    }
+
+    @Test
+    public void testActor(){
 
     }
 
