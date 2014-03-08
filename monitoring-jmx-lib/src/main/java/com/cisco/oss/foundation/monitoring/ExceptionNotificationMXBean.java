@@ -17,6 +17,8 @@
 package com.cisco.oss.foundation.monitoring;
 
 
+import com.cisco.oss.foundation.monitoring.notification.NotificationInfoMXBean;
+
 /**
  * This interface defines a MXBean, used to notify Exception during a flow.
  * It extends NotificationInfoMXBean, which defines the basic details of the Notification.

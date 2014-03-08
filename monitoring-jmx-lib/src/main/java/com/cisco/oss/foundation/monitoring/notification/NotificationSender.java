@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.cisco.oss.foundation.monitoring;
+package com.cisco.oss.foundation.monitoring.notification;
 
 import javax.management.Notification;
 import javax.xml.bind.annotation.XmlTransient;

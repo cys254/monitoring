@@ -16,7 +16,7 @@
 
 package com.cisco.oss.foundation.monitoring;
 
-import com.cisco.oss.foundation.monitoring.*;
+import com.cisco.oss.foundation.monitoring.notification.NotificationSender;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;

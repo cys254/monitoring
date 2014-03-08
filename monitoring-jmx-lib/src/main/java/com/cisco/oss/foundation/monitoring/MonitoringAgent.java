@@ -38,6 +38,8 @@ import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
 
+import com.cisco.oss.foundation.monitoring.notification.NotificationInfoMXBean;
+import com.cisco.oss.foundation.monitoring.notification.NotificationSender;
 import com.cisco.oss.foundation.monitoring.serverconnection.ConnectionInfo;
 import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionActor;
 import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionActorImpl;

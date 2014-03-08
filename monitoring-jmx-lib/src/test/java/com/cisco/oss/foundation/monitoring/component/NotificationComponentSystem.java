@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 import com.cisco.oss.foundation.monitoring.RedundancyMode;
 import com.cisco.oss.foundation.monitoring.INotifier;
-import com.cisco.oss.foundation.monitoring.NotificationSender;
+import com.cisco.oss.foundation.monitoring.notification.NotificationSender;
 
 public class NotificationComponentSystem implements NDSComponentSystemMXBean, INotifier {
     private String name = "ABC";

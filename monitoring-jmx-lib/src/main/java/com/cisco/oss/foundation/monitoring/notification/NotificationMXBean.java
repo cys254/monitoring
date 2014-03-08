@@ -26,8 +26,6 @@ import javax.management.StandardEmitterMBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cisco.oss.foundation.monitoring.NotificationInfoMXBean;
-
 
 public class NotificationMXBean extends StandardEmitterMBean implements NotificationInterfaceMXBean {
 

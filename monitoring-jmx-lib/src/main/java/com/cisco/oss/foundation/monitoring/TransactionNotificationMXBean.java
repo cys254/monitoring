@@ -16,6 +16,8 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import com.cisco.oss.foundation.monitoring.notification.NotificationInfoMXBean;
+
 import java.util.List;
 
 /**

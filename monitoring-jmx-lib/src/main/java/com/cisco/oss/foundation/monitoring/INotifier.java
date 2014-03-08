@@ -16,6 +16,8 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import com.cisco.oss.foundation.monitoring.notification.NotificationSender;
+
 /**
  * It is an interface when implemented by Component's MXBean class, it will get
  * a reference to NotificationSender object through which it can send
