@@ -16,6 +16,7 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import com.cisco.oss.foundation.monitoring.component.data.ComponentInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,7 @@ public class MasterSlaveInfo {
 
     public static void setRedundancyMode(RedundancyMode redundancyMode) {
 
-        AppProperties.redundancyModeChanged(redundancyMode);
+        ComponentInfo.INSTANCE.setRedundancyMode(redundancyMode);
         LOGGER.info("Redundancy Mode switched to :" + redundancyMode);
     }
 

@@ -16,7 +16,10 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import com.cisco.oss.foundation.configuration.ConfigurationFactory;
+import com.cisco.oss.foundation.ip.utils.IpUtils;
 import com.cisco.oss.foundation.monitoring.notification.NotificationSender;
+import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +43,7 @@ import javax.management.NotificationBroadcasterSupport;
  * @author manojc
  */
 class ServerInfo extends NotificationBroadcasterSupport implements NotificationSender, MonitoringAgentMXBean {
+    private Configuration configuration = ConfigurationFactory.getConfiguration();
     private Date agentStartTime;
     private long attrNotificationSeq = 0;
     MonitoringMXBean mXBean;
@@ -55,7 +59,7 @@ class ServerInfo extends NotificationBroadcasterSupport implements NotificationS
      */
     @Override
     public int getAgentPort() {
-        return AppProperties.getAgentPort();
+        return configuration.getInt(FoundationMonitoringConstants.MX_PORT);
     }
 
     /**
@@ -63,7 +67,7 @@ class ServerInfo extends NotificationBroadcasterSupport implements NotificationS
      */
     @Override
     public int getExportedPort() {
-        return AppProperties.getExportedPort();
+        return configuration.getInt(FoundationMonitoringConstants.EXPORTED_PORT);
     }
 
     /**
@@ -79,7 +83,8 @@ class ServerInfo extends NotificationBroadcasterSupport implements NotificationS
      */
     @Override
     public String getAgentVersion() {
-        return AppProperties.getAgentVersion();
+        //TODO: is this still needed?
+        return FoundationMonitoringConstants.AGENT_VERSION;
     }
 
     /**
@@ -87,7 +92,7 @@ class ServerInfo extends NotificationBroadcasterSupport implements NotificationS
      */
     @Override
     public String getHostIP() {
-        return AppProperties.getHostIP();
+        return IpUtils.getHostName();
     }
 
     /**
@@ -95,7 +100,7 @@ class ServerInfo extends NotificationBroadcasterSupport implements NotificationS
      */
     @Override
     public String getHostName() {
-        return AppProperties.getHostName();
+        return IpUtils.getIpAddress();
     }
 
     /**

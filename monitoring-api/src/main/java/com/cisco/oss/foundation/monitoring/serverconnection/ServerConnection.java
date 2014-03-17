@@ -28,7 +28,7 @@ public interface ServerConnection {
     String getServerName();
 
     /**
-     * Either RMI Service Name or Interface Name as defined in the component.
+     * Interface Name as defined in the component.
      */
     String getInterfaceName();
 

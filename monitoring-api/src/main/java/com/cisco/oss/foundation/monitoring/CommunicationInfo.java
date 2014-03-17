@@ -16,6 +16,7 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import com.cisco.oss.foundation.configuration.ConfigurationFactory;
 import com.cisco.oss.foundation.monitoring.serverconnection.ConnectionInfo;
 import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionDetails;
 import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionImp;
@@ -23,6 +24,7 @@ import com.cisco.oss.foundation.monitoring.services.Service;
 import com.cisco.oss.foundation.monitoring.services.ServiceDetails;
 import com.cisco.oss.foundation.monitoring.services.ServiceImp;
 import com.cisco.oss.foundation.monitoring.services.ServiceInfo;
+import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +34,12 @@ import java.util.concurrent.Executors;
 public enum CommunicationInfo {
 
     INSTANCE;
+    private Configuration configuration = ConfigurationFactory.getConfiguration();
     public final ExecutorService actorsThreadPool = Executors.newCachedThreadPool();
     static final Logger LOGGER = LoggerFactory.getLogger(CommunicationInfo.class.getName());
-    static final Logger AUDITOR = LoggerFactory.getLogger("audit." + CommunicationInfo.class.getName());
     private static final ThreadLocal<Long> lastTransactionStartTimeThreadLocal = new ThreadLocal<Long>();
     private static CommunicationInfo communicationInfo;
+
 
     private CommunicationInfo() {
 //        startStatisticsThread();
@@ -97,15 +100,14 @@ public enum CommunicationInfo {
 
     public void transactionStarted(ServiceDetails serviceDetails, String apiName, int usedThreads) {
 
-        if (AppProperties.isMonitoringEnabled()) {
+        if (configuration.getBoolean(FoundationMonitoringConstants.MONITOR_ENABLED)) {
             try {
                 Service service = new ServiceImp(serviceDetails.getInterfaceName(), serviceDetails.getPort(), serviceDetails.getProtocol(), serviceDetails.getServiceDescription(), apiName);
                 ServiceInfo.INSTANCE.serviceActor.tell().startTransaction(service, usedThreads);
 //                StartServiceTransaction startServiceTransaction = new StartServiceTransaction(service, usedThreads);
 //                serviceActor.tell(startServiceTransaction, null);
             } catch (Exception e) {
-//				LOGGER.error("Problem in adding service details" + e);
-                AUDITOR.error("Problem in adding service details" + e);
+                LOGGER.error("Problem in adding service details" + e);
             }
         }
     }
@@ -124,32 +126,30 @@ public enum CommunicationInfo {
 //            }
 //        }
 //        return service;
-//    }
+
 
     public synchronized void transactionFinished(ServiceDetails serviceDetails, String apiName, boolean isFailed, String description) {
-        if (AppProperties.isMonitoringEnabled()) {
+        if (configuration.getBoolean(FoundationMonitoringConstants.MONITOR_ENABLED)) {
             try {
 
                 Service service = new ServiceImp(serviceDetails.getInterfaceName(), serviceDetails.getPort(), serviceDetails.getProtocol(), serviceDetails.getServiceDescription(), apiName);
                 ServiceInfo.INSTANCE.serviceActor.tell().endTransaction(service, isFailed, description);
 
             } catch (Exception e) {
-                LOGGER.trace("Problem in adding service details" + e.getMessage());
-                AUDITOR.trace("Problem in adding service details" + e.getMessage());
+                LOGGER.error("Problem in adding service details" + e.getMessage());
             }
         }
     }
 
     public void transactionStarted(ServerConnectionDetails connetionDetails, String apiName) {
-        if (AppProperties.isMonitoringEnabled()) {
+        if (configuration.getBoolean(FoundationMonitoringConstants.MONITOR_ENABLED)) {
             try {
 
                 ServerConnectionImp serverConnection = new ServerConnectionImp(connetionDetails.getDestinationPort(), connetionDetails.getHostName(), connetionDetails.getInterfaceName(), connetionDetails.getServerName(), apiName);
                 ConnectionInfo.INSTANCE.serverConnectorActor.tell().startTransaction(serverConnection);
 
             } catch (Exception e) {
-                LOGGER.error("Problem in adding server connetions details" + e.getMessage());
-                AUDITOR.error("Problem in adding server connetions details" + e.getMessage());
+                LOGGER.error("Problem in adding server connections details" + e.getMessage());
             }
         }
     }
@@ -167,13 +167,12 @@ public enum CommunicationInfo {
 //    }
 
     public synchronized void transactionFinished(ServerConnectionDetails connetionDetails, String apiName, boolean isFailed, String description) {
-        if (AppProperties.isMonitoringEnabled()) {
+        if (configuration.getBoolean(FoundationMonitoringConstants.MONITOR_ENABLED)) {
             try {
                 ServerConnectionImp serverConnection = new ServerConnectionImp(connetionDetails.getDestinationPort(), connetionDetails.getHostName(), connetionDetails.getInterfaceName(), connetionDetails.getServerName(), apiName);
                 ConnectionInfo.INSTANCE.serverConnectorActor.tell().endTransaction(serverConnection, isFailed, description);
             } catch (Exception e) {
-                LOGGER.trace("Problem in adding server connections details" + e.getMessage());
-                AUDITOR.trace("Problem in adding server connections details" + e.getMessage());
+                LOGGER.error("Problem in adding server connections details" + e.getMessage());
             }
         }
     }

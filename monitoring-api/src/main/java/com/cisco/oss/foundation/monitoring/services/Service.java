@@ -29,7 +29,7 @@ public interface Service {
     String getServiceDescription();
 
     /**
-     * Either RMI Service Name or Interface Name as defined in the component.
+     * Interface Name as defined in the component.
      */
     String getInterfaceName();
 

@@ -16,36 +16,34 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import com.cisco.oss.foundation.monitoring.component.data.ComponentInfo;
+
 public class DefaultMonitoringMXBean implements MonitoringMXBean {
 
-    private static String name;
-    private static String version;
+
 
     @Override
     public String getName() {
-        return name;
+        return ComponentInfo.INSTANCE.getName();
     }
 
     @Override
     public String getFullName() {
-        return name;
+        return ComponentInfo.INSTANCE.getFullName();
     }
 
     @Override
     public String getInstance() {
-        return name;
+        return ComponentInfo.INSTANCE.getInstance();
     }
 
     @Override
     public String getVersion() {
 
-        return version;
+        return ComponentInfo.INSTANCE.getVersion();
     }
 
 
-    public static void setEnvironment(String name, String version) {
-        DefaultMonitoringMXBean.name = name;
-        DefaultMonitoringMXBean.version = version;
-    }
+
 
 }

@@ -151,7 +151,7 @@ public class MonitoringClient {
     }
 
     private String getObjectName(String name, String instance) {
-        String objName = AppProperties.getDomainName() + ":name=" + name;
+        String objName = FoundationMonitoringConstants.DOMAIN_NAME + ":name=" + name;
 
         if ((instance != null) && !instance.trim().equals("")) {
             objName = objName + ",instance=" + instance;

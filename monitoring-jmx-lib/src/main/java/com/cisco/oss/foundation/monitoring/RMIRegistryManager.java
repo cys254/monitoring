@@ -16,6 +16,7 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import com.cisco.oss.foundation.configuration.ConfigurationFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,7 +94,7 @@ public class RMIRegistryManager {
         if (isRMIRegistryRunning(port))
             return true;
 
-        if (AppProperties.isInProcessRMI()) {
+        if (ConfigurationFactory.getConfiguration().getBoolean(FoundationMonitoringConstants.IN_PROC_RMI)) {
             return startInProcRMIRegistry(port);
         } else {
             return startOutProcRMIRegistry(port);

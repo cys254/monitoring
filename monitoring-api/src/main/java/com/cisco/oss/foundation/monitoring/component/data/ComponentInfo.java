@@ -17,15 +17,40 @@
 package com.cisco.oss.foundation.monitoring.component.data;
 
 import com.cisco.oss.foundation.monitoring.IComponentInfoMXBean;
+import com.cisco.oss.foundation.monitoring.MonitoringMXBean;
 import com.cisco.oss.foundation.monitoring.RedundancyMode;
 
-public class ComponentInfo implements IComponentInfoMXBean {
+public enum ComponentInfo implements IComponentInfoMXBean {
 
-    private String fullName;
-    private String instance;
-    private String version;
-    private RedundancyMode redundancyMode;
-    private String name;
+    INSTANCE;
+
+    private ComponentInfo(){
+        if (System.getenv("_RPM_SOFTWARE_NAME") != null) {
+            name = System.getenv("_RPM_SOFTWARE_NAME").toUpperCase();
+        }
+
+        if (System.getenv("_FULL_SOFTWARE_NAME") != null) {
+            fullName = System.getenv("_FULL_SOFTWARE_NAME");
+        } else if (System.getenv("_RPM_SOFTWARE_NAME") != null) {
+            fullName = System.getenv("_RPM_SOFTWARE_NAME").toUpperCase();
+        }
+
+        if (System.getProperty("app.instance.name") != null) {
+            instance = System.getProperty("app.instance.name");
+        } else if (System.getenv("_RPM_SOFTWARE_NAME") != null) {
+            instance = System.getenv("_RPM_SOFTWARE_NAME").toUpperCase() + "Instance1";
+        }
+
+        if (System.getenv("_ARTIFACT_VERSION") != null) {
+            version = System.getenv("_ARTIFACT_VERSION");
+        }
+    }
+
+    private String fullName = "DUMMY";
+    private String instance = "DUMMYInstance1";
+    private String version = "1.0.0";
+    private RedundancyMode redundancyMode = RedundancyMode.StandAlone;
+    private String name = "Dummy";
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
@@ -71,5 +96,6 @@ public class ComponentInfo implements IComponentInfoMXBean {
     public String getVersion() {
         return this.version;
     }
+
 
 }

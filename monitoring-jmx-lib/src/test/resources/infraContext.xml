@@ -21,7 +21,7 @@
                 http://www.springframework.org/schema/beans
                 http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="MonitoringAgentBean" class="com.cisco.oss.foundation.monitoring.MonitoringAgent" scope="prototype"/>
+    <bean id="MonitoringAgentBean" class="com.cisco.oss.foundation.monitoring.RMIMonitoringAgent" scope="prototype"/>
     <!-- <bean id="MonitoringAgentBeanFactory" abstract = "true" class="com.nds.cab.springcomponent.MonitoringAgentFactory">
          <property name = "monitoringAgent" ref = "MonitoringAgentBean"/>
      </bean> -->

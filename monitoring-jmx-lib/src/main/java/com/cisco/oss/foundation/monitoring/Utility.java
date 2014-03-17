@@ -16,6 +16,9 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import com.cisco.oss.foundation.configuration.ConfigurationFactory;
+import com.cisco.oss.foundation.ip.utils.IpUtils;
+import com.cisco.oss.foundation.monitoring.component.data.ComponentInfo;
 import com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,12 +46,12 @@ class Utility {
             return null;
         }
 
-        String serviceURL = "service:jmx:rmi://" + AppProperties.getHostIP() + ":" + AppProperties.getExportedPort()
-                + "/jndi/rmi://" + AppProperties.getHostIP() + ":" + AppProperties.getAgentPort() + "/jmxrmi/"
-                + AppProperties.getComponentInfo(exposedObject).getName();
+        String serviceURL = "service:jmx:rmi://" + IpUtils.getIpAddress() + ":" + ConfigurationFactory.getConfiguration().getInt(FoundationMonitoringConstants.EXPORTED_PORT)
+                + "/jndi/rmi://" + IpUtils.getIpAddress() + ":" + ConfigurationFactory.getConfiguration().getInt(FoundationMonitoringConstants.MX_PORT) + "/jmxrmi/"
+                + ComponentInfo.INSTANCE.getName();
 
-        if ((AppProperties.getComponentInfo(exposedObject).getInstance() != null) && (!AppProperties.getComponentInfo(exposedObject).getInstance().trim().equals(""))) {
-            serviceURL = serviceURL + AppProperties.getComponentInfo(exposedObject).getInstance();
+        if ((ComponentInfo.INSTANCE.getInstance() != null) && (!ComponentInfo.INSTANCE.getInstance().trim().equals(""))) {
+            serviceURL = serviceURL + ComponentInfo.INSTANCE.getInstance();
         }
 
         return serviceURL;
@@ -59,10 +62,10 @@ class Utility {
             return null;
         }
 
-        String objName = AppProperties.getDomainName() + ":name=" + AppProperties.getComponentInfo(exposedObject).getName();
+        String objName = FoundationMonitoringConstants.DOMAIN_NAME + ":name=" + ComponentInfo.INSTANCE.getName();
 
-        if ((AppProperties.getComponentInfo(exposedObject).getInstance() != null) && (!AppProperties.getComponentInfo(exposedObject).getInstance().trim().equals(""))) {
-            objName = objName + ",instance=" + AppProperties.getComponentInfo(exposedObject).getInstance();
+        if ((ComponentInfo.INSTANCE.getInstance() != null) && (!ComponentInfo.INSTANCE.getInstance().trim().equals(""))) {
+            objName = objName + ",instance=" + ComponentInfo.INSTANCE.getInstance();
         }
 
         if (!contentSource.equals("")) {
@@ -73,25 +76,25 @@ class Utility {
     }
 
     static void validateGenericParams(MonitoringMXBean exposedObject) throws AgentRegistrationException {
-        if ((AppProperties.getComponentInfo(exposedObject).getName() == null)
-                || !AppProperties.getComponentInfo(exposedObject).getName().matches(AppProperties.getAppNameNamingStandard())) {
+        if ((ComponentInfo.INSTANCE.getName() == null)
+                || !ComponentInfo.INSTANCE.getName().matches(FoundationMonitoringConstants.APP_INSTANCE_NAMING_STANDARD)) {
             throw new AgentRegistrationException("Name attributes does not follow the naming standard, which is "
-                    + AppProperties.getAppNameNamingStandard());
+                    + FoundationMonitoringConstants.APP_NAME_NAMING_STANDARD);
         }
 
-        if ((AppProperties.getComponentInfo(exposedObject).getInstance() != null) && (!AppProperties.getComponentInfo(exposedObject).getInstance().trim().equals(""))
-                && !AppProperties.getComponentInfo(exposedObject).getInstance().matches(AppProperties.getAppInstanceNamingStandard())) {
+        if ((ComponentInfo.INSTANCE.getInstance() != null) && (!ComponentInfo.INSTANCE.getInstance().trim().equals(""))
+                && !ComponentInfo.INSTANCE.getInstance().matches(FoundationMonitoringConstants.APP_INSTANCE_NAMING_STANDARD)) {
             throw new AgentRegistrationException("Instance attributes does not follow the naming standard, which is "
-                    + AppProperties.getAppInstanceNamingStandard());
+                    + FoundationMonitoringConstants.APP_NAME_NAMING_STANDARD);
         }
     }
 
     static void validateJavaVersion() throws AgentRegistrationException {
-        String javaVersion = AppProperties.getJavaVersion().substring(0, 3);
+        String javaVersion = System.getProperty("java.version").substring(0, 3);
 
         if (javaVersion.equals("1.0") || javaVersion.equals("1.1") || javaVersion.equals("1.2")
                 || javaVersion.equals("1.3") || javaVersion.equals("1.4") || javaVersion.equals("1.5")) {
-            LOGGER.error("Attempt to use MonitoringAgent in an unsupported version of Java");
+            LOGGER.error("Attempt to use RMIMonitoringAgent in an unsupported version of Java");
             throw new AgentRegistrationException("Unsupported java version");
         }
     }

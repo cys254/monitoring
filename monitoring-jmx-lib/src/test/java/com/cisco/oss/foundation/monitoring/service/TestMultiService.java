@@ -16,30 +16,35 @@
 
 package com.cisco.oss.foundation.monitoring.service;
 
-import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.cisco.oss.foundation.monitoring.RMIMonitoringAgent;
 import com.cisco.oss.foundation.monitoring.services.*;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.SlidingTimeWindowReservoir;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.cisco.oss.foundation.monitoring.CommunicationInfo;
-import com.cisco.oss.foundation.monitoring.MonitoringAgent;
 
 public class TestMultiService {
+
+    @Before
+    public void init(){
+//        RMIMonitoringAgent.getInstance();
+    }
+
 
     @Test
     public void testManyServices() {
 
-        MonitoringAgent.getInstance().register();
+        RMIMonitoringAgent.getInstance().register();
 
         ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
@@ -94,11 +99,11 @@ public class TestMultiService {
 
         Assert.assertEquals(3, services.size());
 
-//        try {
-//            Thread.sleep(60000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Thread.sleep(60000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -164,9 +169,6 @@ public class TestMultiService {
 
     }
 
-    @Test
-    public void testActor(){
 
-    }
 
 }

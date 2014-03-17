@@ -25,6 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import com.cisco.oss.foundation.configuration.ConfigurationFactory;
+import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +45,7 @@ public final class RegistryFinder {
     private static final String JAVA_RMI_SERVER_CODEBASE = "java.rmi.server.codebase";
     private static final Logger AUDITOR = LoggerFactory.getLogger("audit." + RegistryFinder.class.getName());
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistryFinder.class);
-    private Configuration configuration = null;
+    private Configuration configuration = ConfigurationFactory.getConfiguration();
     private static RegistryFinder instance;
     private static final Object LOCK = new Object();
 
@@ -119,7 +121,7 @@ public final class RegistryFinder {
 
     private Registry internalProcessStart(final int port, final String command) throws IOException, RemoteException, AccessException {
 
-        String maxHeapArg = "-J-Xmx" + AppProperties.getrmiregistryMaxHeapSize() + "m";
+        String maxHeapArg = "-J-Xmx" + configuration.getInt(FoundationMonitoringConstants.RMIREGISTRY_MAXHEAPSIZE) + "m";
         // start rmiregistry process
         if (System.getProperty("os.name").toLowerCase(Locale.getDefault()).contains("windows")) {
             String[] commandArgsArr = new String[]{command, maxHeapArg, String.valueOf(port)};
