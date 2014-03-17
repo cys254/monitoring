@@ -16,13 +16,16 @@
 
 package com.cisco.oss.foundation.monitoring;
 
-import com.cisco.oss.foundation.configuration.ConfigurationFactory;
 import com.cisco.oss.foundation.ip.utils.IpUtils;
 import com.cisco.oss.foundation.monitoring.notification.NotificationSender;
 import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.management.AttributeChangeNotification;
+import javax.management.MBeanNotificationInfo;
+import javax.management.Notification;
+import javax.management.NotificationBroadcasterSupport;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,11 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.AttributeChangeNotification;
-import javax.management.MBeanNotificationInfo;
-import javax.management.Notification;
-import javax.management.NotificationBroadcasterSupport;
-
 /**
  * This class has agent related information.It implements the NotificationSender &
  * MonitoringAgentMXBean.
@@ -43,15 +41,16 @@ import javax.management.NotificationBroadcasterSupport;
  * @author manojc
  */
 class ServerInfo extends NotificationBroadcasterSupport implements NotificationSender, MonitoringAgentMXBean {
-    private Configuration configuration = ConfigurationFactory.getConfiguration();
+    private Configuration configuration;
     private Date agentStartTime;
     private long attrNotificationSeq = 0;
     MonitoringMXBean mXBean;
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerInfo.class);
 
-    ServerInfo(MonitoringMXBean monitoringmxBean) {
+    ServerInfo(MonitoringMXBean monitoringmxBean, Configuration configuration) {
         agentStartTime = new Date();
         this.mXBean = monitoringmxBean;
+        this.configuration = configuration;
     }
 
     /**

@@ -20,8 +20,6 @@ package com.cisco.oss.foundation.monitoring;
 //import java.io.Serializable;
 
 import java.util.Date;
-import java.util.List;
-import java.net.URI;
 
 public class ExceptionNotificationMXBeanImpl implements ExceptionNotificationMXBean {
 

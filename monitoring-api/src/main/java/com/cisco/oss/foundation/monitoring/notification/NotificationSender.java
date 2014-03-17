@@ -17,7 +17,6 @@
 package com.cisco.oss.foundation.monitoring.notification;
 
 import javax.management.Notification;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * This interface wraps the notification functionality.

@@ -26,10 +26,7 @@ import fi.jumi.actors.eventizers.dynamic.DynamicEventizerProvider;
 import fi.jumi.actors.listeners.CrashEarlyFailureHandler;
 import fi.jumi.actors.listeners.NullMessageListener;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
 
 public enum ServiceInfo implements ServiceInfoMXBean {
 

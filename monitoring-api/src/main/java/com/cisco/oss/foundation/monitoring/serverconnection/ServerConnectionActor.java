@@ -17,8 +17,6 @@
 package com.cisco.oss.foundation.monitoring.serverconnection;
 
 
-import com.cisco.oss.foundation.monitoring.services.Service;
-
 /**
  * Created by Yair Ogen on 3/5/14.
  */

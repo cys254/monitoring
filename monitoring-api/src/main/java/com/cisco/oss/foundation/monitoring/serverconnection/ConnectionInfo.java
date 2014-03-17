@@ -28,17 +28,14 @@ import fi.jumi.actors.listeners.CrashEarlyFailureHandler;
 import fi.jumi.actors.listeners.NullMessageListener;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 public enum ConnectionInfo implements ConnectionInfoMXBean {
 
     INSTANCE;
 
+    public ServerConnectionActorImpl serverConnectionActorImpl =  new ServerConnectionActorImpl();
     public ActorThread serverConnectionActorThread = null;
     public final ActorRef<ServerConnectionActor> serverConnectorActor = createServerConnectionActor();
-
-
-    public ServerConnectionActorImpl serverConnectionActorImpl =  new ServerConnectionActorImpl();
 
 
     public static ConnectionInfo getConnectionInfo() {

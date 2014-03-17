@@ -16,9 +16,8 @@
 
 package com.cisco.oss.foundation.monitoring.notification;
 
-import java.io.Serializable;
-
 import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 /**
  * Defines the base api for all types of Notifications.

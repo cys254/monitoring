@@ -16,15 +16,15 @@
 
 package com.cisco.oss.foundation.monitoring.services;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-
 import com.cisco.oss.foundation.monitoring.ConnectionStatus;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.SlidingTimeWindowReservoir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class ServiceImp implements Service {
 

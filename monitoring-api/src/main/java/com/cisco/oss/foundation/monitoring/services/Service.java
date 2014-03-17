@@ -19,7 +19,6 @@ package com.cisco.oss.foundation.monitoring.services;
 import com.cisco.oss.foundation.monitoring.ConnectionStatus;
 
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicLong;
 
 public interface Service {
 

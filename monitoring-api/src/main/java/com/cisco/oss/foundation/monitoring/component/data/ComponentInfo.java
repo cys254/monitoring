@@ -17,7 +17,6 @@
 package com.cisco.oss.foundation.monitoring.component.data;
 
 import com.cisco.oss.foundation.monitoring.IComponentInfoMXBean;
-import com.cisco.oss.foundation.monitoring.MonitoringMXBean;
 import com.cisco.oss.foundation.monitoring.RedundancyMode;
 
 public enum ComponentInfo implements IComponentInfoMXBean {

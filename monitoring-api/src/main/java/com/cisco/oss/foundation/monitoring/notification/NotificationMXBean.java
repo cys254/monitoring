@@ -16,15 +16,10 @@
 
 package com.cisco.oss.foundation.monitoring.notification;
 
-import javax.management.MBeanNotificationInfo;
-import javax.management.Notification;
-import javax.management.NotificationBroadcasterSupport;
-import javax.management.NotificationFilter;
-import javax.management.NotificationListener;
-import javax.management.StandardEmitterMBean;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.management.*;
 
 
 public class NotificationMXBean extends StandardEmitterMBean implements NotificationInterfaceMXBean {

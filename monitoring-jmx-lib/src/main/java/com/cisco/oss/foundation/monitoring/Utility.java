@@ -20,6 +20,7 @@ import com.cisco.oss.foundation.configuration.ConfigurationFactory;
 import com.cisco.oss.foundation.ip.utils.IpUtils;
 import com.cisco.oss.foundation.monitoring.component.data.ComponentInfo;
 import com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException;
+import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,13 +42,13 @@ class Utility {
     private Utility() {
     }
 
-    static String getServiceURL(MonitoringMXBean exposedObject) {
+    static String getServiceURL(Configuration configuration, MonitoringMXBean exposedObject) {
         if (exposedObject == null) {
             return null;
         }
 
-        String serviceURL = "service:jmx:rmi://" + IpUtils.getIpAddress() + ":" + ConfigurationFactory.getConfiguration().getInt(FoundationMonitoringConstants.EXPORTED_PORT)
-                + "/jndi/rmi://" + IpUtils.getIpAddress() + ":" + ConfigurationFactory.getConfiguration().getInt(FoundationMonitoringConstants.MX_PORT) + "/jmxrmi/"
+        String serviceURL = "service:jmx:rmi://" + IpUtils.getIpAddress() + ":" + configuration.getInt(FoundationMonitoringConstants.EXPORTED_PORT)
+                + "/jndi/rmi://" + IpUtils.getIpAddress() + ":" + configuration.getInt(FoundationMonitoringConstants.MX_PORT) + "/jmxrmi/"
                 + ComponentInfo.INSTANCE.getName();
 
         if ((ComponentInfo.INSTANCE.getInstance() != null) && (!ComponentInfo.INSTANCE.getInstance().trim().equals(""))) {

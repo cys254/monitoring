@@ -16,6 +16,10 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import org.apache.commons.configuration.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.rmi.AccessException;
 import java.rmi.RemoteException;
@@ -24,11 +28,6 @@ import java.rmi.registry.Registry;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-
-import com.cisco.oss.foundation.configuration.ConfigurationFactory;
-import org.apache.commons.configuration.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * this class is a proxy for creating a registry in a way that starts an
@@ -45,9 +44,8 @@ public final class RegistryFinder {
     private static final String JAVA_RMI_SERVER_CODEBASE = "java.rmi.server.codebase";
     private static final Logger AUDITOR = LoggerFactory.getLogger("audit." + RegistryFinder.class.getName());
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistryFinder.class);
-    private Configuration configuration = ConfigurationFactory.getConfiguration();
-    private static RegistryFinder instance;
     private static final Object LOCK = new Object();
+    private static RegistryFinder instance;
 
     private RegistryFinder() {
     }
@@ -55,7 +53,6 @@ public final class RegistryFinder {
     // primitive singleton implementation. if we have more than one instance,
     // never mind.
     public static RegistryFinder getInstance() {
-
         synchronized (LOCK) {
             if (instance == null) {
                 instance = new RegistryFinder();
@@ -67,7 +64,7 @@ public final class RegistryFinder {
     /**
      * @see org.springframework.beans.factory.FactoryBean#getObject()
      */
-    public Registry getRegistry(int port) throws Exception {// NOPMD
+    public Registry getRegistry(Configuration configuration, int port) throws Exception {// NOPMD
 
         try {
             // try to get existing registry
@@ -81,7 +78,7 @@ public final class RegistryFinder {
             return registry;
         } catch (RemoteException ex) {
             // if registry does not exist, create a new one.
-            return startRmiRegistryProcess(port);
+            return startRmiRegistryProcess(configuration, port);
         }
 
     }
@@ -93,7 +90,7 @@ public final class RegistryFinder {
      * @param port
      * @return
      */
-    private Registry startRmiRegistryProcess(final int port) {
+    private Registry startRmiRegistryProcess(Configuration configuration, final int port) {
 
         try {
             final String javaHome = System.getProperty(JAVA_HOME);
@@ -109,7 +106,7 @@ public final class RegistryFinder {
             }
 
             // try with new command with full path
-            return internalProcessStart(port, command);// NOPMD
+            return internalProcessStart(configuration, port, command);// NOPMD
 
         } catch (Exception e1) {
             // if failed exit...
@@ -119,7 +116,7 @@ public final class RegistryFinder {
 
     }
 
-    private Registry internalProcessStart(final int port, final String command) throws IOException, RemoteException, AccessException {
+    private Registry internalProcessStart(final Configuration configuration, final int port, final String command) throws IOException, RemoteException, AccessException {
 
         String maxHeapArg = "-J-Xmx" + configuration.getInt(FoundationMonitoringConstants.RMIREGISTRY_MAXHEAPSIZE) + "m";
         // start rmiregistry process

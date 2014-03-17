@@ -17,6 +17,7 @@
 package com.cisco.oss.foundation.monitoring;
 
 import com.cisco.oss.foundation.configuration.ConfigurationFactory;
+import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,9 +42,9 @@ public class RMIRegistryManager {
      * @return true if rmiregistry is running on the specified port, false
      * otherwise
      */
-    public static boolean isRMIRegistryRunning(int port) {
+    public static boolean isRMIRegistryRunning(Configuration configuration, int port) {
         try {
-            final Registry registry = RegistryFinder.getInstance().getRegistry(port);
+            final Registry registry = RegistryFinder.getInstance().getRegistry(configuration, port);
             registry.list();
             return true;
         } catch (RemoteException ex) {
@@ -60,11 +61,11 @@ public class RMIRegistryManager {
      * @return true if rmiregistry is running on the specified port and service
      * is exported on the rmi registry, false otherwise
      */
-    public static boolean isServiceExported(int port, String serviceName) {
+    public static boolean isServiceExported(Configuration configuration, int port, String serviceName) {
         if (serviceName == null)
             return false;
         try {
-            final Registry registry = RegistryFinder.getInstance().getRegistry(port);
+            final Registry registry = RegistryFinder.getInstance().getRegistry(configuration, port);
             String[] list = registry.list();
 
             if (list != null) {
@@ -90,14 +91,14 @@ public class RMIRegistryManager {
      * @param port on which the rmiregistry needs to be started
      * @return true if successful or it is already started, false otherwise
      */
-    public static boolean startRMIRegistry(int port) {
-        if (isRMIRegistryRunning(port))
+    public static boolean startRMIRegistry(Configuration configuration, int port) {
+        if (isRMIRegistryRunning(configuration, port))
             return true;
 
-        if (ConfigurationFactory.getConfiguration().getBoolean(FoundationMonitoringConstants.IN_PROC_RMI)) {
+        if (configuration.getBoolean(FoundationMonitoringConstants.IN_PROC_RMI)) {
             return startInProcRMIRegistry(port);
         } else {
-            return startOutProcRMIRegistry(port);
+            return startOutProcRMIRegistry(configuration, port);
         }
     }
 
@@ -126,11 +127,11 @@ public class RMIRegistryManager {
      * @param port on which the rmiregistry needs to be started
      * @return true if successful, false otherwise
      */
-    public static boolean startOutProcRMIRegistry(final int port) {
+    public static boolean startOutProcRMIRegistry(Configuration configuration, final int port) {
         LOGGER.info("Starting rmiregistry on port " + port);
         try {
 
-            Registry registryStarted = RegistryFinder.getInstance().getRegistry(port);
+            Registry registryStarted = RegistryFinder.getInstance().getRegistry(configuration, port);
             if (registryStarted != null) {
                 LOGGER.info("rmiregistry started on " + port);
             } else {

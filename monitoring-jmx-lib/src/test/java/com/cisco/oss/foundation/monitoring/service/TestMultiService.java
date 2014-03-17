@@ -99,11 +99,11 @@ public class TestMultiService {
 
         Assert.assertEquals(3, services.size());
 
-        try {
-            Thread.sleep(60000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(60000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
     }
 

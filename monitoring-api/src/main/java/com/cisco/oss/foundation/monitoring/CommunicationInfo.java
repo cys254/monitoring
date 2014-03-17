@@ -16,7 +16,6 @@
 
 package com.cisco.oss.foundation.monitoring;
 
-import com.cisco.oss.foundation.configuration.ConfigurationFactory;
 import com.cisco.oss.foundation.monitoring.serverconnection.ConnectionInfo;
 import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionDetails;
 import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionImp;
@@ -34,7 +33,7 @@ import java.util.concurrent.Executors;
 public enum CommunicationInfo {
 
     INSTANCE;
-    private Configuration configuration = ConfigurationFactory.getConfiguration();
+    private Configuration configuration;
     public final ExecutorService actorsThreadPool = Executors.newCachedThreadPool();
     static final Logger LOGGER = LoggerFactory.getLogger(CommunicationInfo.class.getName());
     private static final ThreadLocal<Long> lastTransactionStartTimeThreadLocal = new ThreadLocal<Long>();
@@ -43,6 +42,10 @@ public enum CommunicationInfo {
 
     private CommunicationInfo() {
 //        startStatisticsThread();
+    }
+
+    public void setConfiguration(Configuration configuration){
+        this.configuration = configuration;
     }
 
     public static CommunicationInfo getCommunicationInfo() {

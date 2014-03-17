@@ -16,7 +16,6 @@
 
 package com.cisco.oss.foundation.monitoring.services;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface ServiceInfoMXBean {

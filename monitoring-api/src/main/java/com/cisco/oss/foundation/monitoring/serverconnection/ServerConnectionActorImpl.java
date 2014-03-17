@@ -18,9 +18,6 @@ package com.cisco.oss.foundation.monitoring.serverconnection;
 
 import com.cisco.oss.foundation.monitoring.ConnectionStatus;
 import com.cisco.oss.foundation.monitoring.TransactionOpen;
-import com.cisco.oss.foundation.monitoring.services.Service;
-import com.cisco.oss.foundation.monitoring.services.ServiceActor;
-import com.cisco.oss.foundation.monitoring.services.ServiceImp;
 
 import java.util.Date;
 import java.util.HashMap;
