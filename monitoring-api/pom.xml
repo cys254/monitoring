@@ -78,5 +78,20 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j-version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.cisco.oss.foundation</groupId>
+            <artifactId>configuration-api</artifactId>
+            <version>${configuration-api-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>fi.jumi</groupId>
+            <artifactId>jumi-actors</artifactId>
+            <version>0.1.196</version>
+        </dependency>
     </dependencies>	
 </project>

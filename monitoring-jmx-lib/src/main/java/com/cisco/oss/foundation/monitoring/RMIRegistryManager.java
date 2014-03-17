@@ -16,6 +16,9 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -28,6 +31,7 @@ import java.rmi.registry.Registry;
 public class RMIRegistryManager {
     private static final String JAVA_HOME_RMI_REGISTRY = System.getProperty("java.home") + "/bin/rmiregistry";
     private static final String RMI_REGISTRY = "rmiregistry";
+    private static final Logger LOGGER = LoggerFactory.getLogger(RMIRegistryManager.class);
 
     /**
      * Checks if rmiregistry is running on the specified port.
@@ -103,13 +107,13 @@ public class RMIRegistryManager {
      * @return true if successful, false otherwise
      */
     public static boolean startInProcRMIRegistry(final int port) {
-        MonitoringAgent.AUDITOR.info("Starting In-Process rmiregistry on port " + port);
+        LOGGER.info("Starting In-Process rmiregistry on port " + port);
         boolean result = true;
         try {
             LocateRegistry.createRegistry(port);
-            MonitoringAgent.AUDITOR.info("In-Process rmiregistry started on port " + port);
+            LOGGER.info("In-Process rmiregistry started on port " + port);
         } catch (RemoteException e) {
-            MonitoringAgent.AUDITOR.error("Failed to start In-Process rmiregistry on port " + port);
+            LOGGER.error("Failed to start In-Process rmiregistry on port " + port);
             result = false;
         }
         return result;
@@ -122,14 +126,14 @@ public class RMIRegistryManager {
      * @return true if successful, false otherwise
      */
     public static boolean startOutProcRMIRegistry(final int port) {
-        MonitoringAgent.AUDITOR.info("Starting rmiregistry on port " + port);
+        LOGGER.info("Starting rmiregistry on port " + port);
         try {
 
             Registry registryStarted = RegistryFinder.getInstance().getRegistry(port);
             if (registryStarted != null) {
-                MonitoringAgent.AUDITOR.info("rmiregistry started on " + port);
+                LOGGER.info("rmiregistry started on " + port);
             } else {
-                MonitoringAgent.AUDITOR.error("Failed to start rmiregistry on " + port);
+                LOGGER.error("Failed to start rmiregistry on " + port);
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -139,34 +143,4 @@ public class RMIRegistryManager {
         //return startProcess(port, JAVA_HOME_RMI_REGISTRY) || startProcess(port, RMI_REGISTRY);
     }
 
-	/*private static boolean startProcess(final int port, final String command) {
-        ProcessBuilder processBuilder = new ProcessBuilder(command, String.valueOf(port));
-		int noOfRetries= 1;
-		while(!isRMIRegistryRunning(port) && noOfRetries<30){
-		try {
-			processBuilder.start();
-		}
-		catch (IOException e) {
-			MonitoringAgent.AUDITOR.error("Failed to start rmiregistry using command " + command + " " + port);
-			return false;
-		}
-		noOfRetries++;
-		try {
-			// wait for the process to start properly
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e) {
-		}
-	}
-
-		if (isRMIRegistryRunning(port)) {
-			MonitoringAgent.AUDITOR.info("rmiregistry started using command " + command + " " + port);
-			return true;
-		}
-		else {			
-			MonitoringAgent.AUDITOR.error("Failed to start rmiregistry using command " + command + " " + port);	
-			return false;
-		}
-	}
-	*/
 }

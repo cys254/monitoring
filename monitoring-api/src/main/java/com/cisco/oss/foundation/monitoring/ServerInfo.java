@@ -17,6 +17,8 @@
 package com.cisco.oss.foundation.monitoring;
 
 import com.cisco.oss.foundation.monitoring.notification.NotificationSender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
@@ -41,6 +43,7 @@ class ServerInfo extends NotificationBroadcasterSupport implements NotificationS
     private Date agentStartTime;
     private long attrNotificationSeq = 0;
     MonitoringMXBean mXBean;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerInfo.class);
 
     ServerInfo(MonitoringMXBean monitoringmxBean) {
         agentStartTime = new Date();
@@ -110,13 +113,13 @@ class ServerInfo extends NotificationBroadcasterSupport implements NotificationS
     @Override
     public void sendAttributeChangeNotification(String msg, String attributeName, String attributeType,
                                                 Object oldValue, Object newValue) {
-        MonitoringAgent.LOGGER.debug("Sending Notification " + (attrNotificationSeq + 1) + ":" + msg + ":"
+        LOGGER.debug("Sending Notification " + (attrNotificationSeq + 1) + ":" + msg + ":"
                 + attributeName + ":" + attributeType + ":" + oldValue.toString() + ":" + newValue.toString());
 
         Notification n = new AttributeChangeNotification(this, attrNotificationSeq++, System.currentTimeMillis(), msg,
                 attributeName, attributeType, oldValue, newValue);
         sendNotification(n);
-        MonitoringAgent.LOGGER.debug("Notification Sent " + attrNotificationSeq);
+        LOGGER.debug("Notification Sent " + attrNotificationSeq);
     }
 
     @Override

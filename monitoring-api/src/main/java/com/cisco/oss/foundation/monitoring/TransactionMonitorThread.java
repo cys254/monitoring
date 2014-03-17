@@ -16,6 +16,7 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import com.cisco.oss.foundation.monitoring.serverconnection.ConnectionInfo;
 import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionImp;
 
 import java.util.Date;
@@ -56,10 +57,10 @@ public class TransactionMonitorThread extends Thread {
     }
 
     private void updateServerConnections() {
-        for (int index = 0; index < MonitoringAgent.getConnectionInfo().getServerConnections().size(); index++) {
-            ServerConnectionImp serverConnection = (ServerConnectionImp) MonitoringAgent.getConnectionInfo().getServerConnections().get(index);
+        for (int index = 0; index < ConnectionInfo.INSTANCE.getServerConnections().size(); index++) {
+            ServerConnectionImp serverConnection = (ServerConnectionImp) ConnectionInfo.INSTANCE.getServerConnections().get(index);
             if (serverConnection.getTransactionOpen() == TransactionOpen.Open) {
-                MonitoringAgent.serverConnectorActor.tell().updateOpenSince(serverConnection,calculateOpenTransactionTime(serverConnection.getLastTransactionStartTime()));
+                ConnectionInfo.INSTANCE.serverConnectorActor.tell().updateOpenSince(serverConnection,calculateOpenTransactionTime(serverConnection.getLastTransactionStartTime()));
 //                connection.setOpenSince(calculateOpenTransactionTime(connection.getLastTransactionStartTime()));
             }
         }

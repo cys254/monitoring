@@ -16,29 +16,13 @@
 
 package com.cisco.oss.foundation.monitoring;
 
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.management.InstanceAlreadyExistsException;
-import javax.management.InstanceNotFoundException;
-import javax.management.MBeanRegistrationException;
-import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
-import javax.management.NotCompliantMBeanException;
-import javax.management.ObjectName;
-import javax.management.remote.JMXConnectorServer;
-import javax.management.remote.JMXConnectorServerFactory;
-import javax.management.remote.JMXServiceURL;
-
+import com.cisco.oss.foundation.monitoring.component.config.MonitorAndManagementSettings;
+import com.cisco.oss.foundation.monitoring.component.data.ComponentInfo;
+import com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException;
+import com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException;
+import com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException;
 import com.cisco.oss.foundation.monitoring.notification.NotificationInfoMXBean;
+import com.cisco.oss.foundation.monitoring.notification.NotificationMXBean;
 import com.cisco.oss.foundation.monitoring.notification.NotificationSender;
 import com.cisco.oss.foundation.monitoring.serverconnection.ConnectionInfo;
 import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionActor;
@@ -57,12 +41,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.remoting.support.RemoteInvocation;
 
-import com.cisco.oss.foundation.monitoring.component.config.MonitorAndManagementSettings;
-import com.cisco.oss.foundation.monitoring.component.data.ComponentInfo;
-import com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException;
-import com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException;
-import com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException;
-import com.cisco.oss.foundation.monitoring.notification.NotificationMXBean;
+import javax.management.*;
+import javax.management.remote.JMXConnectorServer;
+import javax.management.remote.JMXConnectorServerFactory;
+import javax.management.remote.JMXServiceURL;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * MonitoringAgent is the main class of monitoring library. It allows
@@ -74,19 +66,10 @@ import com.cisco.oss.foundation.monitoring.notification.NotificationMXBean;
  */
 public enum MonitoringAgent {
     INSTANCE;
-    public static final ServiceActorImpl serviceActorImpl =  new ServiceActorImpl();
-    public static final ServerConnectionActorImpl serverConnectionActorImpl =  new ServerConnectionActorImpl();
-    public static final ExecutorService actorsThreadPool = Executors.newCachedThreadPool();
-    public static ActorThread serviceActorThread = null;
-    public static ActorThread serverConnectionActorThread = null;
-    public static final ActorRef<ServiceActor> serviceActor = createServiceActor(actorsThreadPool);
-    public static final ActorRef<ServerConnectionActor> serverConnectorActor = createServerConnectionActor(actorsThreadPool);
-
 
     private static final String COLON = ":";
     private static Map<String, MonitoringAgent> registeredAgents = new HashMap<String, MonitoringAgent>();
     static final Logger LOGGER = LoggerFactory.getLogger(MonitoringAgent.class.getName());
-    static final Logger AUDITOR = LoggerFactory.getLogger("audit." + MonitoringAgent.class.getName());
     private MBeanServer mbs;
     private ServerInfo serverInfo;
     private ObjectName appObjectName;
@@ -104,8 +87,8 @@ public enum MonitoringAgent {
     private Map<String, String> jmxEnvironmentMap = null;
     private JMXServiceURL jurl;
     private MXConfiguration configuration = null;
-    private static ServiceInfo serviceInfo;
-    private static ConnectionInfo connectionInfo;
+//    private static ServiceInfo serviceInfo;
+//    private static ConnectionInfo connectionInfo;
     private boolean isComponentRegisted = false;
     private boolean isInfraRegisted = false;
     private ObjectName notificationObjectName;
@@ -253,13 +236,13 @@ public enum MonitoringAgent {
     @SuppressWarnings("deprecation")
     public void setConfiguration(MXConfiguration configuration) throws AgentAlreadyRegisteredException {
         if (isRegistered()) {
-            AUDITOR.warn("Attempt to set the configuration after MonitoringAgent is registered.");
+            LOGGER.warn("Attempt to set the configuration after MonitoringAgent is registered.");
             throw new AgentAlreadyRegisteredException("Configuration should be set before the agent is registered");
         }
 
         this.configuration = configuration;
         AppProperties.loadProperties(configuration);
-        AUDITOR.info("Setting MonitoringAgent configuration. agentPort=" + configuration.getAgentPort()
+        LOGGER.info("Setting MonitoringAgent configuration. agentPort=" + configuration.getAgentPort()
                 + ", exportedPort=" + configuration.getExportedPort() + ", monitorAndManagementSettings "
                 + ((configuration.getMonitorAndManagementSettings() == null) ? "not " : "") + "set");
     }
@@ -279,7 +262,7 @@ public enum MonitoringAgent {
             AgentRegistrationException, IncompatibleClassException {
         AppProperties.loadProperties();
         if (AppProperties.isMonitoringEnabled() == false) {
-            AUDITOR.info("Monitoring is disabled");
+            LOGGER.info("Monitoring is disabled");
             return;
         }
         if (isComponentRegisted == true) {
@@ -373,7 +356,7 @@ public enum MonitoringAgent {
     public synchronized void register(MonitoringMXBean mxBean, String authKey) throws AgentAlreadyRegisteredException,
             AgentRegistrationException, IncompatibleClassException {
 
-        AUDITOR.info("Registering MonitoringAgent for " + AppProperties.getComponentInfo(mxBean).getName() + COLON + AppProperties.getComponentInfo(mxBean).getInstance());
+        LOGGER.info("Registering MonitoringAgent for " + AppProperties.getComponentInfo(mxBean).getName() + COLON + AppProperties.getComponentInfo(mxBean).getInstance());
         AppProperties.loadProperties();
         final URL jarUrl = getSpringUrl();
 
@@ -398,33 +381,33 @@ public enum MonitoringAgent {
             registeredAgents.put(AppProperties.getComponentInfo(mxBean).getName() + COLON + AppProperties.getComponentInfo(mxBean).getInstance() + COLON + authKey, this);
             exposedServiceURL = serviceURL;
             exposedObjectName = strAppObjectName;
-            AUDITOR.info("MonitoringAgent successfully registered. Java Version=" + AppProperties.getJavaVersion()
+            LOGGER.info("MonitoringAgent successfully registered. Java Version=" + AppProperties.getJavaVersion()
                     + ", URL=" + exposedServiceURL + ", ObjectName=" + exposedObjectName);
             TransactionMonitorThread.getInstance().startTread();
         } catch (MalformedURLException muEx) {
             String message = "Failed to register MonitoringAgent. Name/Instance attributes does not follow the naming standard.";
-            AUDITOR.error(message, muEx);
+            LOGGER.error(message, muEx);
             throw new AgentRegistrationException(message, muEx);
         } catch (MalformedObjectNameException monEx) {
             String message = "Failed to register MonitoringAgent. Name/Instance attributes does not follow the naming standard.";
-            AUDITOR.error(message, monEx);
+            LOGGER.error(message, monEx);
             throw new AgentRegistrationException(message, monEx);
         } catch (InstanceAlreadyExistsException existsEx) {
             String message = "Failed to register MonitoringAgent. There is an another instance of MonitoringAgent already registered for "
                     + AppProperties.getComponentInfo(mxBean).getName() + COLON + AppProperties.getComponentInfo(mxBean).getInstance();
-            AUDITOR.error(message, existsEx);
+            LOGGER.error(message, existsEx);
             throw new AgentAlreadyRegisteredException(message, existsEx);
         } catch (NotCompliantMBeanException notComplEx) {
             String message = "Failed to register MonitoringAgent. The MonitoringMXBean object tried to register is not JMX compliant.";
-            AUDITOR.error(message, notComplEx);
+            LOGGER.error(message, notComplEx);
             throw new IncompatibleClassException(message, notComplEx);
         } catch (MBeanRegistrationException mrE) {
             String message = "Failed to register MonitoringAgent. Check the log for more details.";
-            AUDITOR.error(message, mrE);
+            LOGGER.error(message, mrE);
             throw new AgentRegistrationException(message, mrE);
         } catch (IOException ioEx) {
             String message = "Failed to register MonitoringAgent. Check the log for more details.";
-            AUDITOR.error(message, ioEx);
+            LOGGER.error(message, ioEx);
             throw new AgentRegistrationException(message, ioEx);
         }
     }
@@ -443,7 +426,7 @@ public enum MonitoringAgent {
         if (!RMIRegistryManager.isRMIRegistryRunning(AppProperties.getAgentPort())) {
             RMIRegistryManager.startRMIRegistry(AppProperties.getAgentPort());
         } else {
-            AUDITOR.info("rmiregistry is already running on port " + AppProperties.getAgentPort());
+            LOGGER.info("rmiregistry is already running on port " + AppProperties.getAgentPort());
         }
 
         String serviceName = serviceURL.substring(serviceURL.indexOf("jmxrmi/"));
@@ -453,7 +436,7 @@ public enum MonitoringAgent {
                 client.disconnect();
             } else {
                 jmxEnvironmentMap = Utility.prepareJmxEnvironmentMap();
-                AUDITOR.info("Found a stale entry for " + serviceName + " in rmiregistry , it will be overwritten");
+                LOGGER.info("Found a stale entry for " + serviceName + " in rmiregistry , it will be overwritten");
             }
         }
         mbs = ManagementFactory.getPlatformMBeanServer();
@@ -500,10 +483,9 @@ public enum MonitoringAgent {
 
     private void registerServices() {
         try {
-            serviceInfo = CommunicationInfo.getCommunicationInfo().getServiceInfo();
             String strMonConfigObjectName = Utility.getObjectName("ServiceInfo", this.exposedObject);
             servicesObjectName = new ObjectName(strMonConfigObjectName);
-            mbs.registerMBean(serviceInfo, servicesObjectName);
+            mbs.registerMBean(ServiceInfo.INSTANCE, servicesObjectName);
         } catch (MalformedObjectNameException e) {
             LOGGER.trace("Failed to register services" + e.getMessage());
         } catch (InstanceAlreadyExistsException e) {
@@ -552,10 +534,9 @@ public enum MonitoringAgent {
 
     private void registerConnections() {
         try {
-            connectionInfo = CommunicationInfo.getCommunicationInfo().getConnetionInfo();
             String strMonConfigObjectName = Utility.getObjectName("ConnectionInfo", this.exposedObject);
             connetctionsObjectName = new ObjectName(strMonConfigObjectName);
-            mbs.registerMBean(connectionInfo, connetctionsObjectName);
+            mbs.registerMBean(ConnectionInfo.INSTANCE, connetctionsObjectName);
         } catch (MalformedObjectNameException e) {
             LOGGER.trace("Failed to register connetctions" + e.getMessage());
         } catch (InstanceAlreadyExistsException e) {
@@ -620,7 +601,7 @@ public enum MonitoringAgent {
             return;
         }
 
-        AUDITOR.info("Unregistering MonitoringAgent for " + AppProperties.getComponentInfo(this.exposedObject).getName() + COLON
+        LOGGER.info("Unregistering MonitoringAgent for " + AppProperties.getComponentInfo(this.exposedObject).getName() + COLON
                 + AppProperties.getComponentInfo(this.exposedObject).getInstance());
 
         try {
@@ -637,7 +618,7 @@ public enum MonitoringAgent {
             }
 
             isRegistered = false;
-            AUDITOR.info("MonitoringAgent successfully unregistered. Java Version=" + AppProperties.getJavaVersion()
+            LOGGER.info("MonitoringAgent successfully unregistered. Java Version=" + AppProperties.getJavaVersion()
                     + ", URL=" + exposedServiceURL + ", ObjectName=" + exposedObjectName);
 
             exposedServiceURL = null;
@@ -648,15 +629,15 @@ public enum MonitoringAgent {
             AppProperties.clearComponentInfo();
         } catch (IOException ex) {
             String message = "Failed to unregister MonitoringAgent. Check the log for more details.";
-            AUDITOR.error(message, ex);
+            LOGGER.error(message, ex);
             throw new AgentRegistrationException(message, ex);
         } catch (InstanceNotFoundException ex) {
             String message = "Failed to unregister MonitoringAgent. Check the log for more details.";
-            AUDITOR.error(message, ex);
+            LOGGER.error(message, ex);
             throw new AgentRegistrationException(message, ex);
         } catch (MBeanRegistrationException ex) {
             String message = "Failed to unregister MonitoringAgent. Check the log for more details.";
-            AUDITOR.error(message, ex);
+            LOGGER.error(message, ex);
             throw new AgentRegistrationException(message, ex);
         } catch (LinkageError ex) {
 
@@ -682,8 +663,9 @@ public enum MonitoringAgent {
             try {
                 LOGGER.debug("ShutdownHookThread called.");
                 unregister();
-                serviceActorThread.stop();
-                actorsThreadPool.shutdown();
+                ServiceInfo.INSTANCE.serviceActorThread.stop();
+                ConnectionInfo.INSTANCE.serverConnectionActorThread.stop();
+                CommunicationInfo.INSTANCE.actorsThreadPool.shutdown();
             } catch (AgentRegistrationException agentregEx) {
                 LOGGER.debug("ShutdownHookThread failed to unregister MonitoringAgent.");
             }
@@ -707,7 +689,7 @@ public enum MonitoringAgent {
                     synchronized (MonitoringAgent.this) {
                         String serviceName = exposedServiceURL.substring(exposedServiceURL.indexOf("jmxrmi/"));
                         if (!isServiceExported(serviceName)) {
-                            AUDITOR.warn("RMI Connector Server " + serviceName + " is found to be not running on port "
+                            LOGGER.warn("RMI Connector Server " + serviceName + " is found to be not running on port "
                                     + AppProperties.getAgentPort() + ", reregistering RMI Connector Server.");
 
                             try {
@@ -720,13 +702,13 @@ public enum MonitoringAgent {
 
                             rmis = JMXConnectorServerFactory.newJMXConnectorServer(jurl, jmxEnvironmentMap, mbs);
                             rmis.start();
-                            AUDITOR.info("Recreated RMI Connector Server.");
+                            LOGGER.info("Recreated RMI Connector Server.");
                         }
                     }
                 } catch (InterruptedException e) {
                     break;
                 } catch (Exception e) {
-                    AUDITOR.error("ServerRecoveryDaemon failed to reregister RMI Connector Server on port "
+                    LOGGER.error("ServerRecoveryDaemon failed to reregister RMI Connector Server on port "
                             + AppProperties.getAgentPort() + ". Next attempt will be made after " + timeInterval
                             + "ms.", e);
                 }
@@ -736,21 +718,21 @@ public enum MonitoringAgent {
         }
     }
 
-    public static ServiceInfo getServiceInfo() {
-        return serviceInfo;
-    }
+//    public static ServiceInfo getServiceInfo() {
+//        return serviceInfo;
+//    }
 
-    public static ConnectionInfo getConnectionInfo() {
-        return connectionInfo;
-    }
+//    public static ConnectionInfo getConnectionInfo() {
+//        return connectionInfo;
+//    }
 
-    public static void setConnectionInfo(ConnectionInfo connetionInfo) {
-        MonitoringAgent.connectionInfo = connetionInfo;
-    }
+//    public static void setConnectionInfo(ConnectionInfo connetionInfo) {
+//        MonitoringAgent.connectionInfo = connetionInfo;
+//    }
 
-    public static void setServiceInfo(ServiceInfo serviceInfo) {
-        MonitoringAgent.serviceInfo = serviceInfo;
-    }
+//    public static void setServiceInfo(ServiceInfo serviceInfo) {
+//        MonitoringAgent.serviceInfo = serviceInfo;
+//    }
 
     public boolean isComponentRegisted() {
         return isComponentRegisted;
@@ -768,31 +750,7 @@ public enum MonitoringAgent {
         this.isInfraRegisted = isInfraRegisted;
     }
 
-    private static ActorRef<ServiceActor> createServiceActor(ExecutorService actorsThreadPool) {
-        Actors actors = new MultiThreadedActors(
-                actorsThreadPool,
-                new DynamicEventizerProvider(),
-                new CrashEarlyFailureHandler(),
-                new NullMessageListener()
-        );
 
-        // Start up a thread where messages to actors will be executed
-        serviceActorThread = actors.startActorThread();
-        ActorRef<ServiceActor> srvActor = serviceActorThread.bindActor(ServiceActor.class, serviceActorImpl);
-        return srvActor;
-    }
 
-    private static ActorRef<ServerConnectionActor> createServerConnectionActor(ExecutorService actorsThreadPool) {
-        Actors actors = new MultiThreadedActors(
-                actorsThreadPool,
-                new DynamicEventizerProvider(),
-                new CrashEarlyFailureHandler(),
-                new NullMessageListener()
-        );
 
-        // Start up a thread where messages to actors will be executed
-        serverConnectionActorThread = actors.startActorThread();
-        ActorRef<ServerConnectionActor> srvConnActor = serverConnectionActorThread.bindActor(ServerConnectionActor.class, serverConnectionActorImpl);
-        return srvConnActor;
-    }
 }

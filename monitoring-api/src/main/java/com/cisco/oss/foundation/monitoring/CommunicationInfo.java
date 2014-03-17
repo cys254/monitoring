@@ -16,31 +16,29 @@
 
 package com.cisco.oss.foundation.monitoring;
 
-import java.util.*;
-
 import com.cisco.oss.foundation.monitoring.serverconnection.ConnectionInfo;
-import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnection;
 import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionDetails;
 import com.cisco.oss.foundation.monitoring.serverconnection.ServerConnectionImp;
-import com.cisco.oss.foundation.monitoring.services.*;
+import com.cisco.oss.foundation.monitoring.services.Service;
+import com.cisco.oss.foundation.monitoring.services.ServiceDetails;
+import com.cisco.oss.foundation.monitoring.services.ServiceImp;
+import com.cisco.oss.foundation.monitoring.services.ServiceInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public enum CommunicationInfo {
 
     INSTANCE;
+    public final ExecutorService actorsThreadPool = Executors.newCachedThreadPool();
     static final Logger LOGGER = LoggerFactory.getLogger(CommunicationInfo.class.getName());
     static final Logger AUDITOR = LoggerFactory.getLogger("audit." + CommunicationInfo.class.getName());
     private static final ThreadLocal<Long> lastTransactionStartTimeThreadLocal = new ThreadLocal<Long>();
     private static CommunicationInfo communicationInfo;
-    private ServiceInfo serviceInfo;
-    private ConnectionInfo connectionInfo;
 
     private CommunicationInfo() {
-        serviceInfo = ServiceInfo.getServiceInfo();
-        MonitoringAgent.setServiceInfo(serviceInfo);
-        connectionInfo = ConnectionInfo.getConnectionInfo();
-        MonitoringAgent.setConnectionInfo(connectionInfo);
 //        startStatisticsThread();
     }
 
@@ -63,13 +61,7 @@ public enum CommunicationInfo {
 //        statisticsThread.start();
 //    }
 
-    public ServiceInfo getServiceInfo() {
-        return serviceInfo;
-    }
 
-    public ConnectionInfo getConnetionInfo() {
-        return connectionInfo;
-    }
 
 //    private Service createService(ServiceDetails serviceDetails) {
 //
@@ -108,7 +100,7 @@ public enum CommunicationInfo {
         if (AppProperties.isMonitoringEnabled()) {
             try {
                 Service service = new ServiceImp(serviceDetails.getInterfaceName(), serviceDetails.getPort(), serviceDetails.getProtocol(), serviceDetails.getServiceDescription(), apiName);
-                MonitoringAgent.serviceActor.tell().startTransaction(service, usedThreads);
+                ServiceInfo.INSTANCE.serviceActor.tell().startTransaction(service, usedThreads);
 //                StartServiceTransaction startServiceTransaction = new StartServiceTransaction(service, usedThreads);
 //                serviceActor.tell(startServiceTransaction, null);
             } catch (Exception e) {
@@ -139,7 +131,7 @@ public enum CommunicationInfo {
             try {
 
                 Service service = new ServiceImp(serviceDetails.getInterfaceName(), serviceDetails.getPort(), serviceDetails.getProtocol(), serviceDetails.getServiceDescription(), apiName);
-                MonitoringAgent.serviceActor.tell().endTransaction(service, isFailed, description);
+                ServiceInfo.INSTANCE.serviceActor.tell().endTransaction(service, isFailed, description);
 
             } catch (Exception e) {
                 LOGGER.trace("Problem in adding service details" + e.getMessage());
@@ -153,7 +145,7 @@ public enum CommunicationInfo {
             try {
 
                 ServerConnectionImp serverConnection = new ServerConnectionImp(connetionDetails.getDestinationPort(), connetionDetails.getHostName(), connetionDetails.getInterfaceName(), connetionDetails.getServerName(), apiName);
-                MonitoringAgent.serverConnectorActor.tell().startTransaction(serverConnection);
+                ConnectionInfo.INSTANCE.serverConnectorActor.tell().startTransaction(serverConnection);
 
             } catch (Exception e) {
                 LOGGER.error("Problem in adding server connetions details" + e.getMessage());
@@ -178,7 +170,7 @@ public enum CommunicationInfo {
         if (AppProperties.isMonitoringEnabled()) {
             try {
                 ServerConnectionImp serverConnection = new ServerConnectionImp(connetionDetails.getDestinationPort(), connetionDetails.getHostName(), connetionDetails.getInterfaceName(), connetionDetails.getServerName(), apiName);
-                MonitoringAgent.serverConnectorActor.tell().endTransaction(serverConnection, isFailed, description);
+                ConnectionInfo.INSTANCE.serverConnectorActor.tell().endTransaction(serverConnection, isFailed, description);
             } catch (Exception e) {
                 LOGGER.trace("Problem in adding server connections details" + e.getMessage());
                 AUDITOR.trace("Problem in adding server connections details" + e.getMessage());

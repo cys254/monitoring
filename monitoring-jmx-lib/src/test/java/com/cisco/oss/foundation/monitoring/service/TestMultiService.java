@@ -85,7 +85,7 @@ public class TestMultiService {
             e.printStackTrace();
         }
 
-        Collection<Service> services = CommunicationInfo.getCommunicationInfo().getServiceInfo().getServices();
+        Collection<Service> services = ServiceInfo.INSTANCE.getServices();
         System.out.println("services: " + services.size());
 
         for (Service service : services) {

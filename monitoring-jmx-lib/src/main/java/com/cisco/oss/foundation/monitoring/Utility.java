@@ -16,12 +16,15 @@
 
 package com.cisco.oss.foundation.monitoring;
 
+import com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.management.remote.rmi.RMIConnectorServer;
 
-import com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException;
 
 /**
  * This class has all the static utility methods.
@@ -29,6 +32,9 @@ import com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException;
  * @author manojc
  */
 class Utility {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Utility.class);
+
     private Utility() {
     }
 
@@ -85,7 +91,7 @@ class Utility {
 
         if (javaVersion.equals("1.0") || javaVersion.equals("1.1") || javaVersion.equals("1.2")
                 || javaVersion.equals("1.3") || javaVersion.equals("1.4") || javaVersion.equals("1.5")) {
-            MonitoringAgent.AUDITOR.error("Attempt to use MonitoringAgent in an unsupported version of Java");
+            LOGGER.error("Attempt to use MonitoringAgent in an unsupported version of Java");
             throw new AgentRegistrationException("Unsupported java version");
         }
     }

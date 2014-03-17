@@ -29,6 +29,8 @@ import com.cisco.oss.foundation.monitoring.component.config.StartCommandSettings
 import com.cisco.oss.foundation.monitoring.component.config.StatusCommandSettings;
 import com.cisco.oss.foundation.monitoring.component.config.StopCommandSettings;
 import com.cisco.oss.foundation.monitoring.component.data.ComponentInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is responsible for maintaining configuration details.
@@ -36,6 +38,7 @@ import com.cisco.oss.foundation.monitoring.component.data.ComponentInfo;
  * @author manojc
  */
 final class AppProperties {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppProperties.class);
     private static final String DOMAIN_NAME = "foundation.mx";
     private static final String MX_PORT = "service.mxagentRegistry.port";
     private static final String EXPORTED_PORT = "service.mxagentRegistry.innerPort";
@@ -86,7 +89,7 @@ final class AppProperties {
             hostIP = java.net.InetAddress.getLocalHost().getHostAddress();
             hostName = java.net.InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
-            MonitoringAgent.LOGGER.error("Failed to retrieve Host IP/Name", e);
+            LOGGER.error("Failed to retrieve Host IP/Name", e);
         }
     }
 
