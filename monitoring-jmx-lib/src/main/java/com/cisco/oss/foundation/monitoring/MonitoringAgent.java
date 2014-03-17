@@ -65,8 +65,8 @@ import com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException;
 import com.cisco.oss.foundation.monitoring.notification.NotificationMXBean;
 
 /**
- * MonitoringAgent is the main class of NDSMXAgent library. It allows NDS CAB
- * Java components to plug into the CAB Monitoring infrastructure allowing them
+ * MonitoringAgent is the main class of monitoring library. It allows
+ * Java components to plug into the Monitoring infrastructure allowing them
  * to expose the monitoring information in the form of JMX.
  *
  * @author manojc
@@ -89,7 +89,6 @@ public enum MonitoringAgent {
     static final Logger AUDITOR = LoggerFactory.getLogger("audit." + MonitoringAgent.class.getName());
     private MBeanServer mbs;
     private ServerInfo serverInfo;
-    private ObjectName agentObjectName;
     private ObjectName appObjectName;
     private ObjectName servicesObjectName;
     private ObjectName connetctionsObjectName;
@@ -434,12 +433,10 @@ public enum MonitoringAgent {
             IOException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException {
         serverInfo = new ServerInfo(mxBean);
 
-        String strAgentObjectName = Utility.getObjectName("NDSMXAgent", this.exposedObject);
         String strAppObjectName = Utility.getObjectName("Application", this.exposedObject);
 
         jurl = new JMXServiceURL(serviceURL);
         appObjectName = new ObjectName(strAppObjectName);
-        agentObjectName = new ObjectName(strAgentObjectName);
 
         jmxEnvironmentMap = null;
 
@@ -463,7 +460,6 @@ public enum MonitoringAgent {
         rmis = JMXConnectorServerFactory.newJMXConnectorServer(jurl, jmxEnvironmentMap, mbs);
 
         mbs.registerMBean(mxBean, appObjectName);
-        mbs.registerMBean((MonitoringAgentMXBean) serverInfo, agentObjectName);
         registerComponentInfo();
         registerMonitoringConfiguration();
         registerServices();
@@ -630,7 +626,6 @@ public enum MonitoringAgent {
         try {
             serverThread.interrupt();
             rmis.stop();
-            mbs.unregisterMBean(agentObjectName);
             mbs.unregisterMBean(appObjectName);
             unregisterComponentInfo();
             unregisterMonitoringConfiguration();
@@ -697,7 +692,7 @@ public enum MonitoringAgent {
 
     private class ServerRecoveryDaemon extends Thread {
         private long timeInterval = 20000;
-        private static final String SERVER_RECOVERY_DAEMON_POLLING = "nds.mx.recoverydaemon.polling";
+        private static final String SERVER_RECOVERY_DAEMON_POLLING = "foundation.mx.recoverydaemon.polling";
 
         public ServerRecoveryDaemon() {
             timeInterval = Long.parseLong(System.getProperty(SERVER_RECOVERY_DAEMON_POLLING, "20000"));

@@ -24,7 +24,6 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author manojc
  * @see com.cisco.oss.foundation.monitoring.MonitoringAgent
- * @since NDSMXAgent 1.0
  */
 @XmlType
 public interface MonitoringMXBean {

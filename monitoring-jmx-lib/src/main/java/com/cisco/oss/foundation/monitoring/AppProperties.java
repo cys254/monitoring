@@ -36,7 +36,7 @@ import com.cisco.oss.foundation.monitoring.component.data.ComponentInfo;
  * @author manojc
  */
 final class AppProperties {
-    private static final String DOMAIN_NAME = "nds.mx";
+    private static final String DOMAIN_NAME = "foundation.mx";
     private static final String MX_PORT = "service.mxagentRegistry.port";
     private static final String EXPORTED_PORT = "service.mxagentRegistry.innerPort";
     private static final String MONITOR_ENABLED = "service.mxagentRegistry.monitoringEnabled";

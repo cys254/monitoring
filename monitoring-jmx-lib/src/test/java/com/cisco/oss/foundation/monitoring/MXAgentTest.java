@@ -21,12 +21,12 @@ import static org.junit.Assert.fail;
 
 import java.rmi.Remote;
 
+import com.cisco.oss.foundation.monitoring.component.FoundationComponentSystem;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.cisco.oss.foundation.monitoring.component.AllValidData;
 import com.cisco.oss.foundation.monitoring.component.IncompatibleComponentSystem;
-import com.cisco.oss.foundation.monitoring.component.NDSComponentSystem;
 import com.cisco.oss.foundation.monitoring.component.NotificationComponentSystem;
 import com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException;
 import com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException;
@@ -56,18 +56,18 @@ public class MXAgentTest {
 
     @Test
     public void testRegisterUnregister() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         MonitoringClient myClient = null;
         try {
             AppProperties.clearComponentInfo();
             AppProperties.setMonitoringEnabled(true);
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
 
             myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, mxAgent
-                    .getAgentDetails().getAgentPort(), "ndsmonitoradmin", "admin");
+                    .getAgentDetails().getAgentPort(), "foundationmonitoradmin", "admin");
             String result = myClient.getManagementInformationXml();
 
             if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")
@@ -87,16 +87,16 @@ public class MXAgentTest {
 
     @Test
     public void testRegisterUnregisterWithMXBeanFromConstructor() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         MonitoringClient myClient = null;
         try {
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
             myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, mxAgent
-                    .getAgentDetails().getAgentPort(), "ndsmonitoradmin", "admin");
+                    .getAgentDetails().getAgentPort(), "foundationmonitoradmin", "admin");
             String result = myClient.getManagementInformationXml();
 
             if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")
@@ -116,16 +116,16 @@ public class MXAgentTest {
 
 	/*@Test
     public void testRegisterUnregisterWithMXBeanAndMXConfigurationFromConstructor() {
-		NDSComponentSystem myComponent = null;
+		FoundationComponentSystem myComponent = null;
 		MonitoringAgent mxAgent = null;
 		MXConfiguration mxConfig = new Configuration(3010, 4010);
 		MonitoringClient myClient = null;
 		try {
-			myComponent = new NDSComponentSystem();
+			myComponent = new FoundationComponentSystem();
 			mxAgent = new MonitoringAgent(myComponent, mxConfig);
 
 			myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, 3010,
-					"ndsmonitoradmin", "admin");
+					"foundationmonitoradmin", "admin");
 			String result = myClient.getManagementInformationXml();
 
 			if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")
@@ -145,10 +145,10 @@ public class MXAgentTest {
 
     @Test
     public void testGetExposedServiceURL() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         try {
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
             String hostIP = AppProperties.getHostIP();
@@ -166,14 +166,14 @@ public class MXAgentTest {
 
     @Test
     public void testGetExposedObjectName() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         try {
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
-            assertEquals("nds.mx:name=ABC,instance=Backup,contentSource=Application", mxAgent.getExposedObjectName());
+            assertEquals("foundation.mx:name=ABC,instance=Backup,contentSource=Application", mxAgent.getExposedObjectName());
         } catch (Exception ex) {
             fail(ex.getMessage());
         } finally {
@@ -185,17 +185,17 @@ public class MXAgentTest {
 
     @Test
     public void testRegisterWithoutAuthKey() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         MonitoringClient myClient = null;
         try {
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
 
             myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, mxAgent
-                    .getAgentDetails().getAgentPort(), "ndsmonitoradmin", "admin");
+                    .getAgentDetails().getAgentPort(), "foundationmonitoradmin", "admin");
             String result = myClient.getManagementInformationXml();
 
             if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")
@@ -215,10 +215,10 @@ public class MXAgentTest {
 
     @Test
     public void testAgentDetailsWithDefaultConfiguration() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         try {
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
 
@@ -237,10 +237,10 @@ public class MXAgentTest {
 	/*@SuppressWarnings("deprecation")
 	@Test
 	public void testAgentDetailsWithCustomConfiguration() {
-		NDSComponentSystem myComponent = null;
+		FoundationComponentSystem myComponent = null;
 		MonitoringAgent mxAgent = null;
 		try {
-			myComponent = new NDSComponentSystem();
+			myComponent = new FoundationComponentSystem();
 			mxAgent = new MonitoringAgent();
 
 			MonitorAndManagementSettings monitorAndManagementSettings = MonitorAndManagementSettings
@@ -267,10 +267,10 @@ public class MXAgentTest {
 	/*@SuppressWarnings("deprecation")
 	@Test
 	public void testAgentDetailsWithCustomConfigurationWithoutSuccssFlags() {
-		NDSComponentSystem myComponent = null;
+		FoundationComponentSystem myComponent = null;
 		MonitoringAgent mxAgent = null;
 		try {
-			myComponent = new NDSComponentSystem();
+			myComponent = new FoundationComponentSystem();
 			mxAgent = new MonitoringAgent();
 
 			MonitorAndManagementSettings monitorAndManagementSettings = MonitorAndManagementSettings
@@ -296,11 +296,11 @@ public class MXAgentTest {
 */
 	/*@Test
 	public void testWithCustomConfiguration() {
-		NDSComponentSystem myComponent = null;
+		FoundationComponentSystem myComponent = null;
 		MonitoringAgent mxAgent = null;
 		MonitoringClient myClient = null;
 		try {
-			myComponent = new NDSComponentSystem();
+			myComponent = new FoundationComponentSystem();
 			mxAgent = new MonitoringAgent();
 
 			Configuration mxConfiguration = new Configuration(3003, 4020);
@@ -308,7 +308,7 @@ public class MXAgentTest {
 			mxAgent.register(myComponent);
 
 			myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, 3003,
-					"ndsmonitoradmin", "admin");
+					"foundationmonitoradmin", "admin");
 			String result = myClient.getManagementInformationXml();
 
 			if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")
@@ -329,11 +329,11 @@ public class MXAgentTest {
     /*@SuppressWarnings("deprecation")
     @Test
     public void testMonitorAndManagementSettings() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         MonitoringClient myClient = null;
         try {
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = new MonitoringAgent();
 
             MonitorAndManagementSettings monitorAndManagementSettings = MonitorAndManagementSettings
@@ -344,7 +344,7 @@ public class MXAgentTest {
             mxAgent.register(myComponent);
 
             myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, 3003,
-                    "ndsmonitoradmin", "admin");
+                    "foundationmonitoradmin", "admin");
             String result = myClient.getManagementInformationXml();
 
             if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")
@@ -364,17 +364,17 @@ public class MXAgentTest {
 */
     @Test
     public void testRegisterWithSpaceInApplicationName() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         MonitoringClient myClient = null;
         try {
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem("My Test", "1.2", "Primary", "java Test");
+            myComponent = new FoundationComponentSystem("My Test", "1.2", "Primary", "java Test");
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
 
             myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, mxAgent
-                    .getAgentDetails().getAgentPort(), "ndsmonitoradmin", "admin");
+                    .getAgentDetails().getAgentPort(), "foundationmonitoradmin", "admin");
             String result = myClient.getManagementInformationXml();
 
             if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")
@@ -392,17 +392,17 @@ public class MXAgentTest {
 
     @Test
     public void testRegisterWithSpaceInInstanceName() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         MonitoringClient myClient = null;
         try {
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem("MyTest", "1.2", "Instance 1", "java Test");
+            myComponent = new FoundationComponentSystem("MyTest", "1.2", "Instance 1", "java Test");
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
 
             myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, mxAgent
-                    .getAgentDetails().getAgentPort(), "ndsmonitoradmin", "admin");
+                    .getAgentDetails().getAgentPort(), "foundationmonitoradmin", "admin");
             String result = myClient.getManagementInformationXml();
 
             if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")
@@ -420,13 +420,13 @@ public class MXAgentTest {
 
     @Test
     public void testAgentAlreadyRegisteredException() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         boolean isTestSuccess = false;
 
         try {
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
         } catch (Exception ex) {
@@ -474,13 +474,13 @@ public class MXAgentTest {
 
     @Test
     public void testAgentRegistrationExceptionWithInvalidApplicationName() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         boolean isTestSuccess = false;
 
         try {
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem("Test,", "1.2", "Primary", "java Test");
+            myComponent = new FoundationComponentSystem("Test,", "1.2", "Primary", "java Test");
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
         } catch (AgentRegistrationException arEx) {
@@ -499,13 +499,13 @@ public class MXAgentTest {
 
     @Test
     public void testAgentRegistrationExceptionWithApplicationNameEndingWithSpace() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         boolean isTestSuccess = false;
 
         try {
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem("Test ", "1.2", "Primary", "java Test");
+            myComponent = new FoundationComponentSystem("Test ", "1.2", "Primary", "java Test");
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
         } catch (AgentRegistrationException arEx) {
@@ -524,12 +524,12 @@ public class MXAgentTest {
 
     @Test
     public void testAgentRegistrationExceptionWithInvalidInstance() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         boolean isTestSuccess = false;
 
         try {
-            myComponent = new NDSComponentSystem("Test", "1.2", "Primary,", "java Test");
+            myComponent = new FoundationComponentSystem("Test", "1.2", "Primary,", "java Test");
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
         } catch (AgentRegistrationException arEx) {
@@ -548,12 +548,12 @@ public class MXAgentTest {
 
     @Test
     public void testAgentRegistrationExceptionWithInstanceEndingWithSpace() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         boolean isTestSuccess = false;
 
         try {
-            myComponent = new NDSComponentSystem("Test", "1.2", "Primary ", "java Test");
+            myComponent = new FoundationComponentSystem("Test", "1.2", "Primary ", "java Test");
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
         } catch (AgentRegistrationException arEx) {
@@ -590,7 +590,7 @@ public class MXAgentTest {
 
     @Test
     public void testWrongAuthenticationValues() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
 
         try {
@@ -599,7 +599,7 @@ public class MXAgentTest {
             String instance = "Primary";
             String commandLine = "java TestApp abc";
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem(appName, version, instance, commandLine);
+            myComponent = new FoundationComponentSystem(appName, version, instance, commandLine);
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
 
@@ -626,7 +626,7 @@ public class MXAgentTest {
 
     @Test
     public void testOneAppMultiServletSupport() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
 
         try {
@@ -635,12 +635,12 @@ public class MXAgentTest {
             String instance = "Primary";
             String commandLine = "java TestApp abc";
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem(appName, version, instance, commandLine);
+            myComponent = new FoundationComponentSystem(appName, version, instance, commandLine);
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent, authKey);
 
             MonitoringAgent secondAgent = MonitoringAgent.getRegistedAgent(appName, instance, authKey);
-            NDSComponentSystem secondComponent = (NDSComponentSystem) secondAgent.getExposedObject();
+            FoundationComponentSystem secondComponent = (FoundationComponentSystem) secondAgent.getExposedObject();
             if (!secondComponent.getName().equals(appName) || !secondComponent.getInstance().equals(instance)
                     || !secondComponent.getVersion().equals(version)
                     || !secondComponent.getCommandLine().equals(commandLine)) {
@@ -657,25 +657,25 @@ public class MXAgentTest {
 
 /*	@Test
 	public void testMultiApplicationsSupport() {
-		NDSComponentSystem myComponent1 = null, myComponent2 = null;
+		FoundationComponentSystem myComponent1 = null, myComponent2 = null;
 		MonitoringAgent myAgent1 = null, myAgent2 = null;
 		MonitoringClient myClient1 = null, myClient2 = null;
 		String result = null;
 
 		try {
 			AppProperties.clearComponentInfo();
-			myComponent1 = new NDSComponentSystem("TestApp", "1.0", "Primary", "java TestApp abc");
+			myComponent1 = new FoundationComponentSystem("TestApp", "1.0", "Primary", "java TestApp abc");
 			myAgent1 = MonitoringAgent.getInstance();
 			myAgent1.setConfiguration(new Configuration(4010));
 			myAgent1.register(myComponent1);
 			AppProperties.clearComponentInfo();
-			myComponent2 = new NDSComponentSystem("TestApp", "1.0", "Primary1", "java TestApp abc");
+			myComponent2 = new FoundationComponentSystem("TestApp", "1.0", "Primary1", "java TestApp abc");
 			myAgent2 = MonitoringAgent.getInstance();
 			myAgent2.setConfiguration(new Configuration(4020));
 			myAgent2.register(myComponent2);
 
 			myClient1 = new MonitoringClient(myComponent1.getName(), myComponent1.getInstance(), null, myAgent1
-					.getAgentDetails().getAgentPort(), "ndsmonitoradmin", "admin");
+					.getAgentDetails().getAgentPort(), "foundationmonitoradmin", "admin");
 			result = myClient1.getManagementInformationXml();
 
 			if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")
@@ -683,7 +683,7 @@ public class MXAgentTest {
 				fail("ManagementInformationXml couldn't be retrieved");
 
 			myClient2 = new MonitoringClient(myComponent2.getName(), myComponent2.getInstance(), null, myAgent2
-					.getAgentDetails().getAgentPort(), "ndsmonitoradmin", "admin");
+					.getAgentDetails().getAgentPort(), "foundationmonitoradmin", "admin");
 			result = myClient2.getManagementInformationXml();
 
 			if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")
@@ -732,12 +732,12 @@ public class MXAgentTest {
 
     @Test
     public void testSetConfigurationAfterMonitoringAgentIsRegistered() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         boolean isTestSuccess = false;
         try {
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
             mxAgent.setConfiguration(new Configuration(4001));
@@ -758,7 +758,7 @@ public class MXAgentTest {
 	
 	/*@Test
 	public void testRegisterWithStaleRegistryEntry() {
-		NDSComponentSystem myComponent = null;
+		FoundationComponentSystem myComponent = null;
 		MonitoringAgent mxAgent = null;
 		//MXConfiguration mxConfig = new Configuration(3010, 4010);
 		MonitoringClient myClient = null;
@@ -772,13 +772,13 @@ public class MXAgentTest {
 			
 			stub = null;
 			
-			myComponent = new NDSComponentSystem();
+			myComponent = new FoundationComponentSystem();
 			mxAgent = MonitoringAgent.getMonitoringAgent();
 			mxAgent.register(myComponent);
 			//mxAgent = new MonitoringAgent(myComponent, mxConfig);
 
 			myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, 3010,
-					"ndsmonitoradmin", "admin");
+					"foundationmonitoradmin", "admin");
 			String result = myClient.getManagementInformationXml();
 
 			if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")

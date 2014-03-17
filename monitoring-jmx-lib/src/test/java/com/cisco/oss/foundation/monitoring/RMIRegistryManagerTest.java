@@ -24,10 +24,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.cisco.oss.foundation.monitoring.component.FoundationComponentSystem;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.cisco.oss.foundation.monitoring.component.NDSComponentSystem;
 
 /**
  * @author manojc
@@ -70,11 +69,11 @@ public class RMIRegistryManagerTest {
 
     @Test
     public void testIsServiceExported() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         try {
             AppProperties.clearComponentInfo();
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
             int agentPort = mxAgent.getAgentDetails().getAgentPort();

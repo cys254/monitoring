@@ -20,7 +20,7 @@ import java.util.Date;
 
 /**
  * It is the MXBean interface which will be implemented internally by the
- * NDSMXAgent.
+ * FoundationMXAgent.
  *
  * @author manojc
  * @see com.cisco.oss.foundation.monitoring.MonitoringAgent

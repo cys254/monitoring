@@ -106,7 +106,6 @@ class ServerInfo extends NotificationBroadcasterSupport implements NotificationS
      *                      change.
      * @param newValue      An object representing value of the attribute after the
      *                      change.
-     * @since NDSMXAgent 1.1
      */
     @Override
     public void sendAttributeChangeNotification(String msg, String attributeName, String attributeType,

@@ -28,7 +28,7 @@ import java.rmi.registry.Registry;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cisco.oss.foundation.monitoring.component.NDSComponentSystem;
+import com.cisco.oss.foundation.monitoring.component.FoundationComponentSystem;
 
 public class ServerRecoveryDaemonTest {
     @Before
@@ -52,16 +52,16 @@ public class ServerRecoveryDaemonTest {
 
     @Test
     public void testServerRecoveryDaemon() {
-        System.setProperty("nds.mx.recoverydaemon.polling", "5000");
-        NDSComponentSystem myComponent = null;
+        System.setProperty("foundation.mx.recoverydaemon.polling", "5000");
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         MonitoringClient myClient = null;
         try {
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
             myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, mxAgent
-                    .getAgentDetails().getAgentPort(), "ndsmonitoradmin", "admin");
+                    .getAgentDetails().getAgentPort(), "foundationmonitoradmin", "admin");
             String result = myClient.getManagementInformationXml();
 
             if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")
@@ -73,7 +73,7 @@ public class ServerRecoveryDaemonTest {
             Thread.sleep(10000);
 
             myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, mxAgent
-                    .getAgentDetails().getAgentPort(), "ndsmonitoradmin", "admin");
+                    .getAgentDetails().getAgentPort(), "foundationmonitoradmin", "admin");
             result = myClient.getManagementInformationXml();
 
             if (result == null || !result.startsWith("<MBeans>") || !result.endsWith("</MBeans>")

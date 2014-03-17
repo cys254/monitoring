@@ -21,7 +21,7 @@ package com.cisco.oss.foundation.monitoring.exception;
  */
 public class AgentRegistrationException extends MonitoringAgentException {
     static final long serialVersionUID = -3387588676987546448L;
-    private static final String attrExString = "GenericMXBean specific attributes doesn't conform to NDSMXAgent standards";
+    private static final String attrExString = "GenericMXBean specific attributes doesn't conform to FoundationMXAgent standards";
 
     /**
      * Creates a new AgentRegistrationException.

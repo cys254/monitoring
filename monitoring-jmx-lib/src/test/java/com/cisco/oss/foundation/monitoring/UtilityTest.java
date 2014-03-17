@@ -19,7 +19,7 @@
  */
 package com.cisco.oss.foundation.monitoring;
 
-import com.cisco.oss.foundation.monitoring.component.NDSComponentSystem;
+import com.cisco.oss.foundation.monitoring.component.FoundationComponentSystem;
 
 import static org.junit.Assert.*;
 
@@ -43,7 +43,7 @@ public class UtilityTest {
     @Test
     public void testGetServiceURLForNullInstance() {
         AppProperties.clearComponentInfo();
-        NDSComponentSystem myComponent = new NDSComponentSystem("ABC", "1.2", null, "/bin/abc");
+        FoundationComponentSystem myComponent = new FoundationComponentSystem("ABC", "1.2", null, "/bin/abc");
         String hostIP = AppProperties.getHostIP();
         String expectedServiceURL = "service:jmx:rmi://" + hostIP + ":" + AppProperties.getExportedPort() + "/jndi/rmi://" + hostIP + ":" + AppProperties.getAgentPort() + "/jmxrmi/ABC";
         assertEquals(expectedServiceURL, Utility.getServiceURL(myComponent));
@@ -57,14 +57,14 @@ public class UtilityTest {
     @Test
     public void testGetObjectNameForNullInstance() {
 
-        NDSComponentSystem myComponent = new NDSComponentSystem("ABC", "1.2", null, "/bin/abc");
-        assertEquals("nds.mx:name=ABC,contentSource=Application", Utility.getObjectName("Application", myComponent));
+        FoundationComponentSystem myComponent = new FoundationComponentSystem("ABC", "1.2", null, "/bin/abc");
+        assertEquals("foundation.mx:name=ABC,contentSource=Application", Utility.getObjectName("Application", myComponent));
     }
 
     @Test
     public void testGetObjectNameForNoContentSource() {
         AppProperties.clearComponentInfo();
-        NDSComponentSystem myComponent = new NDSComponentSystem("ABC", "1.2", "Backup", "/bin/abc");
-        assertEquals("nds.mx:name=ABC,instance=Backup", Utility.getObjectName("", myComponent));
+        FoundationComponentSystem myComponent = new FoundationComponentSystem("ABC", "1.2", "Backup", "/bin/abc");
+        assertEquals("foundation.mx:name=ABC,instance=Backup", Utility.getObjectName("", myComponent));
     }
 }

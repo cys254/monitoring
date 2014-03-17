@@ -35,7 +35,7 @@ public class IncompatibleComponentSystem implements IncompatibleComponentMXBean 
     }
 
     public String getHost() {
-        return "ndsmonitor-ltp2";
+        return "monitor-ltp2";
     }
 
 

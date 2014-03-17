@@ -28,7 +28,7 @@ public class AgentRegistrationExceptionTest {
 
     @Test
     public void testAgentRegistrationException() {
-        assertEquals("GenericMXBean specific attributes doesn't conform to NDSMXAgent standards",
+        assertEquals("GenericMXBean specific attributes doesn't conform to FoundationMXAgent standards",
                 new AgentRegistrationException().getMessage());
     }
 

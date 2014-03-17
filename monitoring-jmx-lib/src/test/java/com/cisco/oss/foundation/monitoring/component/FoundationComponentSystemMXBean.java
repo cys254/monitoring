@@ -17,6 +17,6 @@ package com.cisco.oss.foundation.monitoring.component;
 
 import com.cisco.oss.foundation.monitoring.MonitoringMXBean;
 
-public interface NDSComponentSystemMXBean extends MonitoringMXBean {
+public interface FoundationComponentSystemMXBean extends MonitoringMXBean {
     public String getCommandLine();
 }

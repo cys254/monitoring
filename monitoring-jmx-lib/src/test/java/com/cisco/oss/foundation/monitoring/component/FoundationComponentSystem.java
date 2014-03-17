@@ -19,16 +19,16 @@ import javax.xml.bind.annotation.XmlElement;
 
 import com.cisco.oss.foundation.monitoring.RedundancyMode;
 
-public class NDSComponentSystem implements NDSComponentSystemMXBean {
+public class FoundationComponentSystem implements FoundationComponentSystemMXBean {
     private String name = "ABC";
     private String commandLine = "java ABC arg1 arg2";
     private String instance = "Backup";
     private String version = "1.2.3.R4";
 
-    public NDSComponentSystem() {
+    public FoundationComponentSystem() {
     }
 
-    public NDSComponentSystem(String name, String version, String instance, String commandLine) {
+    public FoundationComponentSystem(String name, String version, String instance, String commandLine) {
         this.name = name;
         this.version = version;
         this.instance = instance;

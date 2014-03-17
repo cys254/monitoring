@@ -1,2 +1,2 @@
-ndsmonitoradmin readwrite
-ndsmonitorguest readonly
+foundationmonitoradmin readwrite
+foundationmonitorguest readonly

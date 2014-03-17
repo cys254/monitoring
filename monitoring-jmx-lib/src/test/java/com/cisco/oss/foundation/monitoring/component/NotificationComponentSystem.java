@@ -21,7 +21,7 @@ import com.cisco.oss.foundation.monitoring.RedundancyMode;
 import com.cisco.oss.foundation.monitoring.INotifier;
 import com.cisco.oss.foundation.monitoring.notification.NotificationSender;
 
-public class NotificationComponentSystem implements NDSComponentSystemMXBean, INotifier {
+public class NotificationComponentSystem implements FoundationComponentSystemMXBean, INotifier {
     private String name = "ABC";
     private String commandLine = "java ABC arg1 arg2";
     private String instance = "Backup";

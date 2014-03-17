@@ -28,6 +28,7 @@ import com.cisco.oss.foundation.monitoring.services.*;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.SlidingTimeWindowReservoir;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.cisco.oss.foundation.monitoring.CommunicationInfo;
@@ -101,6 +102,7 @@ public class TestMultiService {
 
     }
 
+    @Ignore
     @Test
     public void testHistogram(){
         final int tpsTime = 10;

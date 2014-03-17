@@ -24,10 +24,10 @@
 
     <import resource="infraContext.xml"/>
 
-    <bean id="NDSComponentSystemBean" class="com.nds.cab.infra.testmx.NDSComponentSystem"/>
+    <bean id="FoundationComponentSystem" class="com.cisco.oss.foundation.monitoring.component.FoundationComponentSystem"/>
     <bean id="mybean" parent="MonitoringAgentBean">
         <constructor-arg index="0">
-            <ref bean="NDSComponentSystemBean"/>
+            <ref bean="FoundationComponentSystem"/>
         </constructor-arg>
     </bean>
 

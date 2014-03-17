@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cisco.oss.foundation.monitoring.component.NDSComponentSystem;
+import com.cisco.oss.foundation.monitoring.component.FoundationComponentSystem;
 
 public class MonitoringClientTest {
 
@@ -50,11 +50,11 @@ public class MonitoringClientTest {
 
     @Test
     public void testMonitoringClientStringString() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         MonitoringClient myClient = null;
         try {
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
 
@@ -76,16 +76,16 @@ public class MonitoringClientTest {
 
     @Test
     public void testMonitoringClientStringStringStringString() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         MonitoringClient myClient = null;
         try {
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
 
             myClient = new MonitoringClient(mxAgent.getExposedServiceURL(), mxAgent.getExposedObjectName(),
-                    "ndsmonitoradmin", "admin");
+                    "foundationmonitoradmin", "admin");
             String result = myClient.getManagementInformationXml();
             assertNotNull(result);
             assertTrue(result.startsWith("<MBeans>"));
@@ -103,11 +103,11 @@ public class MonitoringClientTest {
 
     @Test
     public void testMonitoringClientStringStringStringInt() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         MonitoringClient myClient = null;
         try {
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
 
@@ -130,16 +130,16 @@ public class MonitoringClientTest {
 
     @Test
     public void testMonitoringClientStringStringStringIntStringString() {
-        NDSComponentSystem myComponent = null;
+        FoundationComponentSystem myComponent = null;
         MonitoringAgent mxAgent = null;
         MonitoringClient myClient = null;
         try {
-            myComponent = new NDSComponentSystem();
+            myComponent = new FoundationComponentSystem();
             mxAgent = MonitoringAgent.getInstance();
             mxAgent.register(myComponent);
 
             myClient = new MonitoringClient(myComponent.getName(), myComponent.getInstance(), null, mxAgent
-                    .getAgentDetails().getAgentPort(), "ndsmonitoradmin", "admin");
+                    .getAgentDetails().getAgentPort(), "foundationmonitoradmin", "admin");
             String result = myClient.getManagementInformationXml();
             assertNotNull(result);
             assertTrue(result.startsWith("<MBeans>"));

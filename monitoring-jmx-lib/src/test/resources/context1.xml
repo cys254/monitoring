@@ -21,14 +21,14 @@
                 http://www.springframework.org/schema/beans
                 http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="NDSComponentSystemBean1" class="com.nds.cab.infra.testmx.NDSComponentSystem">
+    <bean id="FoundationComponentSystemBean1" class="com.cisco.oss.foundation.monitoring.component.FoundationComponentSystem">
         <constructor-arg index="0" type="java.lang.String" value="TestApp"/>
         <constructor-arg index="1" type="java.lang.String" value="1.0"/>
         <constructor-arg index="2" type="java.lang.String" value="Primary"/>
         <constructor-arg index="3" type="java.lang.String" value="java TestApp abc"/>
     </bean>
 
-    <bean id="NDSComponentSystemBean2" class="com.nds.cab.infra.testmx.NDSComponentSystem">
+    <bean id="FoundationComponentSystemBean2" class="com.cisco.oss.foundation.monitoring.component.FoundationComponentSystem">
         <constructor-arg index="0" type="java.lang.String" value="TestApp"/>
         <constructor-arg index="1" type="java.lang.String" value="1.0"/>
         <constructor-arg index="2" type="java.lang.String" value="Backup"/>
@@ -38,12 +38,12 @@
     <import resource="infraContext.xml"/>
     <bean id="mybean" parent="MonitoringAgentBean">
         <constructor-arg index="0">
-            <ref bean="NDSComponentSystemBean1"/>
+            <ref bean="FoundationComponentSystemBean1"/>
         </constructor-arg>
     </bean>
     <bean id="mybean1" parent="MonitoringAgentBean">
         <constructor-arg index="0">
-            <ref bean="NDSComponentSystemBean2"/>
+            <ref bean="FoundationComponentSystemBean2"/>
         </constructor-arg>
     </bean>
 
