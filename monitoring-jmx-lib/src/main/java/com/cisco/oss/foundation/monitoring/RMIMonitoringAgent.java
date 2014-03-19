@@ -240,6 +240,8 @@ public enum RMIMonitoringAgent {
         return statusCommandSettings;
     }
 
+
+
     /**
      * Registers the mxBean object and exposes it to the outside world. Any
      * changes to this object will automatically be reflected and seen by the
@@ -251,33 +253,8 @@ public enum RMIMonitoringAgent {
      * @throws com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException
      * @see RMIMonitoringAgent#unregister()
      */
-    private void register(MonitoringMXBean mxBean) throws AgentAlreadyRegisteredException, AgentRegistrationException, IncompatibleClassException {
-        if (LOGGER == null) {
-            LOGGER = LoggerFactory.getLogger(RMIMonitoringAgent.class.getName());
-        }
-        if (!configuration.getBoolean(FoundationMonitoringConstants.MONITOR_ENABLED)) {
-            LOGGER.info("Monitoring is disabled");
-            return;
-        }
 
-        register(mxBean, null);
-    }
-
-    /**
-     * Registers the mxBean object and exposes it to the outside world. Any
-     * changes to this object will automatically be reflected and seen by the
-     * monitoring applications.
-     *
-     * @param mxBean
-     * @param authKey Authentication key, required in case RMIMonitoringAgent instance
-     *                needs to be shared
-     * @throws com.cisco.oss.foundation.monitoring.exception.AgentAlreadyRegisteredException
-     * @throws com.cisco.oss.foundation.monitoring.exception.AgentRegistrationException
-     * @throws com.cisco.oss.foundation.monitoring.exception.IncompatibleClassException
-     * @see RMIMonitoringAgent#unregister()
-     */
-
-    private synchronized void register(MonitoringMXBean mxBean, String authKey) throws AgentAlreadyRegisteredException,
+    private synchronized void register(MonitoringMXBean mxBean) throws AgentAlreadyRegisteredException,
             AgentRegistrationException, IncompatibleClassException {
 
         LOGGER.info("Registering RMIMonitoringAgent for " + ComponentInfo.INSTANCE.getName() + COLON + ComponentInfo.INSTANCE.getInstance());
