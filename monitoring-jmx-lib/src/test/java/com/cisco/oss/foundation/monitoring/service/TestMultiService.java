@@ -26,6 +26,7 @@ import com.cisco.oss.foundation.monitoring.RMIMonitoringAgent;
 import com.cisco.oss.foundation.monitoring.services.*;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.SlidingTimeWindowReservoir;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -42,9 +43,9 @@ public class TestMultiService {
 
 
     @Test
-    public void testManyServices() {
+    public void testManyServices() throws Exception {
 
-        RMIMonitoringAgent.getInstance().register();
+        RMIMonitoringAgent.getInstance().register(new PropertiesConfiguration(TestMultiService.class.getResource("/config.properties").getPath()));
 
         ExecutorService threadPool = Executors.newFixedThreadPool(10);
 

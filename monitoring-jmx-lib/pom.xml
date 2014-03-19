@@ -89,13 +89,13 @@
             <artifactId>monitoring-api</artifactId>
             <version>${monitoring-api-version}</version>
         </dependency>
-        <dependency>
+       <!-- <dependency>
             <groupId>com.cisco.oss.foundation</groupId>
             <artifactId>configuration-lib</artifactId>
             <version>${configuration-lib-version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        --><dependency>
             <groupId>com.cisco.oss.foundation</groupId>
             <artifactId>logging-log4j</artifactId>
             <version>${logging-log4j-version}</version>
