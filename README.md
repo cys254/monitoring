@@ -1,6 +1,6 @@
 monitoring is library for foundation related monitoring. It exposes standard API for JMX export.
 
-Read teh user guide in [our Wiki](../../wiki/Home).
+Read the user guide in [our Wiki](../../wiki/Home).
 
 Following is the list of release references to the different libraries managed under this repository:
 
