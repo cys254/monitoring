@@ -131,7 +131,7 @@ public enum CommunicationInfo {
 //        return service;
 
 
-    public synchronized void transactionFinished(ServiceDetails serviceDetails, String apiName, boolean isFailed, String description) {
+    public void transactionFinished(ServiceDetails serviceDetails, String apiName, boolean isFailed, String description) {
         if (configuration.getBoolean(FoundationMonitoringConstants.MONITOR_ENABLED)) {
             try {
 
@@ -169,7 +169,7 @@ public enum CommunicationInfo {
 //        return connetion;
 //    }
 
-    public synchronized void transactionFinished(ServerConnectionDetails connetionDetails, String apiName, boolean isFailed, String description) {
+    public void transactionFinished(ServerConnectionDetails connetionDetails, String apiName, boolean isFailed, String description) {
         if (configuration.getBoolean(FoundationMonitoringConstants.MONITOR_ENABLED)) {
             try {
                 ServerConnectionImp serverConnection = new ServerConnectionImp(connetionDetails.getDestinationPort(), connetionDetails.getHostName(), connetionDetails.getInterfaceName(), connetionDetails.getServerName(), apiName);

@@ -133,7 +133,7 @@ public enum RMIMonitoringAgent {
 //     * @see com.cisco.oss.foundation.monitoring.component.config.MonitorAndManagementSettingsMXBean
 //     */
     /*public RMIMonitoringAgent(MonitoringMXBean mXBean, MXConfiguration configuration)
-			throws AgentAlreadyRegisteredException, AgentRegistrationException, IncompatibleClassException {
+            throws AgentAlreadyRegisteredException, AgentRegistrationException, IncompatibleClassException {
 
 		AppProperties.loadProperties(configuration);
 		setConfiguration(configuration);
@@ -145,7 +145,7 @@ public enum RMIMonitoringAgent {
     }
 
 
-//    /**
+    //    /**
 //     * Two or more instance/modules of applications sharing same instance of JVM
 //     * can also share an instance of RMIMonitoringAgent. One instance/module can
 //     * register into RMIMonitoringAgent by supplying an authentication key. Other
@@ -239,7 +239,6 @@ public enum RMIMonitoringAgent {
         statusCommandSettings.setDownIndication(System.getenv("_DOWN_INDICATION"));
         return statusCommandSettings;
     }
-
 
 
     /**
@@ -357,6 +356,24 @@ public enum RMIMonitoringAgent {
         serverThread.start();
 
         return strAppObjectName;
+    }
+
+    public ObjectInstance registerMBean(Object object) {
+
+        String objName = FoundationMonitoringConstants.DOMAIN_NAME + ":name=" + ComponentInfo.INSTANCE.getName();
+
+        if ((ComponentInfo.INSTANCE.getInstance() != null) && (!ComponentInfo.INSTANCE.getInstance().trim().equals(""))) {
+            objName = objName + ",instance=" + ComponentInfo.INSTANCE.getInstance();
+        }
+
+        objName = objName + ",contentSource=" + object.getClass().getSimpleName();
+
+        try {
+            return mbs.registerMBean(object, new ObjectName(objName));
+        } catch (Exception e) {
+            LOGGER.error("Problem registering bean: {}. error is: {}", objName, e, e);
+            throw new IllegalArgumentException(e);
+        }
     }
 
     private void registerComponentInfo() throws MalformedObjectNameException, InstanceAlreadyExistsException,
@@ -555,7 +572,7 @@ public enum RMIMonitoringAgent {
 
     public void register(Configuration configuration) {
         this.configuration = configuration;
-        if(firstTime.compareAndSet(true,false)){
+        if (firstTime.compareAndSet(true, false)) {
             try {
                 CommunicationInfo.getCommunicationInfo().setConfiguration(configuration);
                 register(new DefaultMonitoringMXBean());

@@ -67,9 +67,9 @@ public class ServerConnectionImp implements ServerConnection {
     String serverName;
     long totalRequestCount;
     String apiName;
-    Date lastSuccessfulRequestTime;
-    Date lastTransactionStartTime;
-    Date lastTransactionEndTime;
+    Date lastSuccessfulRequestTime = new Date();
+    Date lastTransactionStartTime = new Date();
+    Date lastTransactionEndTime = new Date();
     long lastTransactionProcessingTime;
     ConnectionStatus connectionStatus;
     TransactionOpen transactionOpen;
