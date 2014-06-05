@@ -55,6 +55,9 @@
             </roles>
         </developer>
     </developers>
+    <properties>
+        <configuration-api-version>0.0.0-7</configuration-api-version>
+    </properties>
     <scm>
         <connection>scm:git:git@github.com:foundation-runtime/monitoring.git</connection>
         <developerConnection>scm:git:git@github.com:foundation-runtime/monitoring.git</developerConnection>
