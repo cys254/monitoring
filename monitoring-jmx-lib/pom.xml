@@ -57,6 +57,7 @@
     </developers>
     <properties>
         <logging-log4j-version>1.0.0-1</logging-log4j-version>
+        <monitoring-api-version>0.0.0-6</monitoring-api-version>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:foundation-runtime/monitoring.git</connection>
