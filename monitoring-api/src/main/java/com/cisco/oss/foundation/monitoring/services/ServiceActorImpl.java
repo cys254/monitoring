@@ -26,7 +26,7 @@ import java.util.Map;
  * Created by Yair Ogen on 3/5/14.
  */
 public class ServiceActorImpl  implements ServiceActor{
-    protected Map<Service, ServiceImp> services = new HashMap<>();
+    protected Map<Service, ServiceImp> services = new HashMap<Service, ServiceImp>();
 
     public void startTransaction(Service service, int usedThreads){
         ServiceImp serviceImp = null;

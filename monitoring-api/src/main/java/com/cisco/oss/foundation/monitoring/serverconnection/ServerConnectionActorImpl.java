@@ -27,7 +27,7 @@ import java.util.Map;
  * Created by Yair Ogen on 3/5/14.
  */
 public class ServerConnectionActorImpl implements ServerConnectionActor{
-    protected Map<ServerConnection, ServerConnectionImp> serverConnections = new HashMap<>();
+    protected Map<ServerConnection, ServerConnectionImp> serverConnections = new HashMap<ServerConnection, ServerConnectionImp>();
 
     public void startTransaction(ServerConnection serverConnection){
         ServerConnectionImp serverConnectionImp = null;
