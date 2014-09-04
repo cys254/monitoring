@@ -33,6 +33,7 @@ public class TransactionMonitorThread extends Thread {
     public static TransactionMonitorThread getInstance() {
         if (transactionMonitorThread == null) {
             transactionMonitorThread = new TransactionMonitorThread();
+            transactionMonitorThread.setDaemon(true);
         }
         return transactionMonitorThread;
     }

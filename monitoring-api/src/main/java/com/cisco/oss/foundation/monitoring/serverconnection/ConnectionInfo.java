@@ -49,6 +49,7 @@ public enum ConnectionInfo implements ConnectionInfoMXBean {
     public List<ServerConnection> getServerConnections() {
 
         return (List) Lists.newArrayList(serverConnectionActorImpl.serverConnections.values());
+//        return serverConnectionActorImpl.serverConnections.values();
     }
 
     private ActorRef<ServerConnectionActor> createServerConnectionActor() {
