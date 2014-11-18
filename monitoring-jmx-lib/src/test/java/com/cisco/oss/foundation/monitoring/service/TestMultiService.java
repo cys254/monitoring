@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.cisco.oss.foundation.monitoring.MonitoringAgentFactory;
 import com.cisco.oss.foundation.monitoring.RMIMonitoringAgent;
 import com.cisco.oss.foundation.monitoring.services.*;
 import com.codahale.metrics.Histogram;
@@ -45,7 +46,7 @@ public class TestMultiService {
     @Test
     public void testManyServices() throws Exception {
 
-        RMIMonitoringAgent.getInstance().register(new PropertiesConfiguration(TestMultiService.class.getResource("/config.properties").getPath()));
+        MonitoringAgentFactory.getInstance().register(new PropertiesConfiguration(TestMultiService.class.getResource("/config.properties").getPath()));
 
         ExecutorService threadPool = Executors.newFixedThreadPool(10);
 

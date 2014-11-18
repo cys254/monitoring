@@ -55,7 +55,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author manojc
  * @see MonitoringMXBean
  */
-public enum RMIMonitoringAgent {
+public enum RMIMonitoringAgent implements MonitoringAgent {
     INSTANCE;
     private static final AtomicBoolean firstTime = new AtomicBoolean(true);
     private static final String COLON = ":";
@@ -140,9 +140,9 @@ public enum RMIMonitoringAgent {
 		LOGGER.debug("New RMIMonitoringAgent object getting created");
 		register(mXBean);
 	}*/
-    public static RMIMonitoringAgent getInstance() {
-        return INSTANCE;
-    }
+//    public static RMIMonitoringAgent getInstance() {
+//        return INSTANCE;
+//    }
 
 
     //    /**
