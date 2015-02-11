@@ -29,7 +29,7 @@ import java.util.Set;
 public class MonitoringAgentFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringAgentFactory.class);
-    private static final Reflections reflections = new Reflections("com","org");
+    private static final Reflections reflections = new Reflections("com", "org");
     private static Set<Class<? extends MonitoringAgent>> subTypesOfMonitoringAgent = reflections.getSubTypesOf(MonitoringAgent.class);
 
     public static MonitoringAgent getInstance() {
@@ -40,9 +40,9 @@ public class MonitoringAgentFactory {
                 throw new IllegalArgumentException("Can't find any implementations of MonitoringAgent in the classpath");
             } else {
                 Class<? extends MonitoringAgent> next = subTypesOfMonitoringAgent.iterator().next();
-                if(next.isEnum()){
-                    monitoringAgent = (MonitoringAgent) Enum.valueOf((Class<? extends Enum>)next,"INSTANCE");
-                }else{
+                if (next.isEnum()) {
+                    monitoringAgent = (MonitoringAgent) Enum.valueOf((Class<? extends Enum>) next, "INSTANCE");
+                } else {
                     throw new IllegalArgumentException("MonitoringAgent implementations must be of enum type and have one insance called 'INSTANCE' to verify a singleton instance");
                 }
                 if (subTypesOfMonitoringAgent.size() > 1) {
@@ -50,7 +50,9 @@ public class MonitoringAgentFactory {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            MonitoringImplementationNotFoundException exception = new MonitoringImplementationNotFoundException("could not find any implementation or monitoring-api lib", e);
+            LOGGER.error(e.toString());
+            throw exception;
         }
 
         return monitoringAgent;
