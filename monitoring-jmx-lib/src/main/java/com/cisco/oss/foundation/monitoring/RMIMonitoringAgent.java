@@ -571,6 +571,8 @@ public enum RMIMonitoringAgent implements MonitoringAgent {
     }
 
     public void register(Configuration configuration) {
+        if (!configuration.getBoolean("service.mxagentRegistry.monitoringEnabled"))
+            return;
         this.configuration = configuration;
         if (firstTime.compareAndSet(true, false)) {
             try {
