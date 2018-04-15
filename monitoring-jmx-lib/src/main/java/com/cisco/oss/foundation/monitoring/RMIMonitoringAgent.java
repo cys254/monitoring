@@ -571,13 +571,12 @@ public enum RMIMonitoringAgent implements MonitoringAgent {
     }
 
     public void register(Configuration configuration) {
-        if (!configuration.getBoolean("service.mxagentRegistry.monitoringEnabled"))
-            return;
         this.configuration = configuration;
         if (firstTime.compareAndSet(true, false)) {
             try {
                 CommunicationInfo.getCommunicationInfo().setConfiguration(configuration);
-                register(new DefaultMonitoringMXBean());
+                if (configuration.getBoolean(FoundationMonitoringConstants.MONITOR_ENABLED))
+                    register(new DefaultMonitoringMXBean());
             } catch (Exception e) {
                 LOGGER.error("error creating monitoring agent: {}", e, e);
             }
