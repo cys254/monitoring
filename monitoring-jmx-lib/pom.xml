@@ -31,7 +31,7 @@
     <groupId>com.cisco.oss.foundation</groupId>
     <artifactId>monitoring-jmx-lib</artifactId>
     <name>monitoring-jmx-lib</name>
-    <version>1.0.3-3-SNAPSHOT</version>
+    <version>1.0.3-3</version>
     <description>This project is the foundation runtime monitoring http implementation project.</description>
     <url>https://github.com/foundation-runtime/monitoring/monitoring-jmx-lib</url>
     <licenses>
@@ -65,7 +65,7 @@
         <connection>scm:git:git@github.com:foundation-runtime/monitoring.git</connection>
         <developerConnection>scm:git:git@github.com:foundation-runtime/monitoring.git</developerConnection>
         <url>https://github.com/foundation-runtime/monitoring.git</url>
-        <tag>HEAD</tag>
+        <tag>monitoring-jmx-lib-1.0.3-3</tag>
     </scm>
     <organization>
         <name>Cisco</name>
